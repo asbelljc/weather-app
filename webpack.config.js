@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
@@ -38,6 +38,17 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         use: 'asset/resource',
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [['@babel/preset-env', { targets: 'defaults' }]],
+            cacheDirectory: true,
+          },
+        },
       },
     ],
   },
