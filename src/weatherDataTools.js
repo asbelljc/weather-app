@@ -1,6 +1,7 @@
 import countries from './countries.json';
 import usStates from './us-states.json';
 import usCities from './us-cities.json';
+import getLocalDateAndTime from './timeTools.js';
 
 const usCityIds = Array.from(usCities, (city) => city.id);
 const usStateNames = Object.values(usStates);
