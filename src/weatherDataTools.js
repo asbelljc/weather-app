@@ -1,11 +1,5 @@
-import countries from './countries.json';
-import usStates from './us-states.json';
 import usCities from './us-cities.json';
 import getLocalDateAndTime from './timeTools';
-
-const usCityIds = Array.from(usCities, (city) => city.id);
-const usStateNames = Object.values(usStates);
-const usStateCodes = Object.keys(usStates);
 
 async function getBasicDataSource(city, state, country) {
   const response = await fetch(
@@ -129,6 +123,8 @@ async function getWeatherData(city, state = '', country) {
     daily: dailyData,
   };
 }
+
+export default getWeatherData;
 
 // NOTES
 // api hourly data starts with most recent hour (eg. if it's now 6:20pm, 6pm)

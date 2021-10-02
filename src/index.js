@@ -1,5 +1,12 @@
 import './style.scss';
 import 'regenerator-runtime/runtime';
+import countries from './countries.json';
+import usStates from './us-states.json';
+import usCities from './us-cities.json';
+
+const usCityIds = Array.from(usCities, (city) => city.id);
+const usStateNames = Object.values(usStates);
+const usStateCodes = Object.keys(usStates);
 
 const body = document.querySelector('body');
 
