@@ -63,10 +63,6 @@ async function getWeatherData(city, state = '', country = '') {
     : json.sys.country;
 }
 
-function convertToCelsius(temperature) {
-  return (temperature - 32) * (5 / 9);
-}
-
 getWeatherData('boone', 'nc', 'us');
 
 /*
@@ -75,7 +71,7 @@ TO DO
 [ ] Make country dropdown box using countries.json
 [ ] Make state dropdown that only activates if USA is selected
 [ ] Make city text input
-[ ] Implement 'One Call API' (harvest lat./long. values from other api call first!)
+[x] Implement 'One Call API' (harvest lat./long. values from other api call first!)
 [ ] Figure out how to display...
     - current conditions (weather, temp, visibility, today's hi/lo, 'Feels like')
     - hourly forecast (weather, precip chance, temp)

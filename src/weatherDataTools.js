@@ -1,6 +1,14 @@
 import usCities from './us-cities.json';
 import getLocalDateAndTime from './timeTools';
 
+function convertToCelsius(temperature) {
+  return Math.round((temperature - 32) * (5 / 9));
+}
+
+function convertToKmh(windSpeed) {
+  return Math.round(windSpeed * 1.609);
+}
+
 async function getBasicDataSource(city, state, country) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
@@ -48,8 +56,14 @@ function getCurrentData(source) {
     source.timezone_offset
   );
   const iconCode = source.current.weather[0].icon;
-  const temperature = source.current.temp;
-  const feelsLike = source.current.feels_like;
+  const temperature = {
+    f: source.current.temp,
+    c: convertToCelsius(source.current.temp),
+  };
+  const feelsLike = {
+    f: source.current.feels_like,
+    c: convertToCelsius(source.current.feels_like),
+  };
   const uvIndex = source.current.uvi;
   const sunrise = getLocalDateAndTime(
     source.current.sunrise,
@@ -59,7 +73,10 @@ function getCurrentData(source) {
     source.current.sunset,
     source.timezone_offset
   ).fullTime;
-  const windSpeed = source.current.wind_speed;
+  const windSpeed = {
+    mph: source.current.wind_speed,
+    kmh: convertToKmh(source.current.wind_speed),
+  };
   const windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
   const { humidity } = source.current;
 
@@ -82,7 +99,10 @@ function getHourlyData(source) {
   const hourlyData = next24Hours.map((dataObject) => {
     const { hour } = getLocalDateAndTime(dataObject.dt, source.timezone_offset);
     const iconCode = dataObject.weather[0].icon;
-    const temperature = dataObject.temp;
+    const temperature = {
+      f: dataObject.temp,
+      c: convertToCelsius(dataObject.temp),
+    };
     const chanceOfPrecip = dataObject.pop;
 
     return { hour, iconCode, temperature, chanceOfPrecip };
@@ -95,8 +115,14 @@ function getDailyData(source) {
   const dailyData = source.daily.map((dataObject) => {
     const { day } = getLocalDateAndTime(dataObject.dt, source.timezone_offset);
     const iconCode = dataObject.weather[0].icon;
-    const highTemp = dataObject.temp.max;
-    const lowTemp = dataObject.temp.min;
+    const highTemp = {
+      f: dataObject.temp.max,
+      c: convertToCelsius(dataObject.temp.max),
+    };
+    const lowTemp = {
+      f: dataObject.temp.min,
+      c: convertToCelsius(dataObject.temp.min),
+    };
     const chanceOfPrecip = dataObject.pop;
 
     return { day, iconCode, highTemp, lowTemp, chanceOfPrecip };
