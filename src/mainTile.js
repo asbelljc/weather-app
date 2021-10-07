@@ -21,7 +21,7 @@ function makeCurrent(weatherData) {
   current.className = 'current';
   const icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = `./icons/${weatherData.current.iconCode}.svg`;
+  icon.src = require(`./icons/${weatherData.current.iconCode}.svg`);
   const temperature = document.createElement('div');
   temperature.className = 'temperature';
   temperature.textContent = `${weatherData.current.temperature.f}°`;
@@ -29,7 +29,7 @@ function makeCurrent(weatherData) {
   hiLoFeel.className = 'hi-lo-feel';
   hiLoFeel.innerText = `
     ${weatherData.daily[0].highTemp.f} / ${weatherData.daily[0].lowTemp.f}
-    Feels like ${weatherData.current.feelsLike}
+    Feels like ${weatherData.current.feelsLike.f}
   `;
 
   current.appendChild(icon);
@@ -51,13 +51,13 @@ function makeHourly(weatherData) {
     time.textContent = `0${hour.hour}`;
     const icon = document.createElement('img');
     icon.className = 'icon';
-    icon.src = `./icons/${hour.iconCode}.svg`;
+    icon.src = require(`./icons/${hour.iconCode}.svg`);
     const precipitation = document.createElement('div');
     precipitation.className = 'precipitation';
     const raindrop = document.createElement('img');
-    raindrop.src = './icons/raindrop.svg';
+    raindrop.src = require('./icons/raindrop.svg');
     const percentage = document.createElement('div');
-    percentage.textContent = `${hour.chanceOfPrecip}%`;
+    percentage.textContent = `${hour.chanceOfPrecip * 100}%`;
 
     [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
     [time, icon, precipitation].forEach((elem) => tile.appendChild(elem));

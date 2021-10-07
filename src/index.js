@@ -3,67 +3,58 @@ import 'regenerator-runtime/runtime';
 import countries from './countries.json';
 import usStates from './us-states.json';
 import usCities from './us-cities.json';
+import getWeatherData from './weatherDataTools';
+import loadMain from './mainTile';
 
-const usCityIds = Array.from(usCities, (city) => city.id);
-const usStateNames = Object.values(usStates);
-const usStateCodes = Object.keys(usStates);
+getWeatherData('Boone', 'NC', 'US').then(loadMain);
 
-const body = document.querySelector('body');
+// const usCityIds = Array.from(usCities, (city) => city.id);
+// const usStateNames = Object.values(usStates);
+// const usStateCodes = Object.keys(usStates);
 
-const temperatureBox = document.createElement('div');
-temperatureBox.className = 'temperature';
+// const body = document.querySelector('body');
 
-const cityBox = document.createElement('div');
-cityBox.className = 'city';
+// const temperatureBox = document.createElement('div');
+// temperatureBox.className = 'temperature';
 
-const stateBox = document.createElement('div');
-stateBox.className = 'state';
+// const cityBox = document.createElement('div');
+// cityBox.className = 'city';
 
-const cityInput = document.createElement('input');
-cityInput.type = 'text';
-cityInput.className = 'search-box';
-cityInput.placeholder = 'Enter your city';
+// const stateBox = document.createElement('div');
+// stateBox.className = 'state';
 
-const stateInput = document.createElement('select');
-const stateInputDefault = document.createElement('option');
-stateInputDefault.textContent = 'Select your state';
-stateInputDefault.value = '';
-stateInput.appendChild(stateInputDefault);
-usStateNames.forEach((state) => {
-  const option = document.createElement('option');
-  option.textContent = state;
-  option.value = usStateCodes.filter((code) => usStates[code] === state);
-  stateInput.appendChild(option);
-});
+// const cityInput = document.createElement('input');
+// cityInput.type = 'text';
+// cityInput.className = 'search-box';
+// cityInput.placeholder = 'Enter your city';
 
-const searchBtn = document.createElement('button');
-searchBtn.type = 'button';
-searchBtn.textContent = 'Search';
-searchBtn.className = 'search-btn';
-searchBtn.addEventListener('click', () => {
-  let inputs = cityInput.value.split(',');
-  inputs = inputs.map((item) => item.trim());
-  getWeatherData(...inputs);
-});
+// const stateInput = document.createElement('select');
+// const stateInputDefault = document.createElement('option');
+// stateInputDefault.textContent = 'Select your state';
+// stateInputDefault.value = '';
+// stateInput.appendChild(stateInputDefault);
+// usStateNames.forEach((state) => {
+//   const option = document.createElement('option');
+//   option.textContent = state;
+//   option.value = usStateCodes.filter((code) => usStates[code] === state);
+//   stateInput.appendChild(option);
+// });
 
-[temperatureBox, cityBox, stateBox, cityInput, stateInput, searchBtn].forEach(
-  (box) => body.appendChild(box)
-);
+// const searchBtn = document.createElement('button');
+// searchBtn.type = 'button';
+// searchBtn.textContent = 'Search';
+// searchBtn.className = 'search-btn';
+// searchBtn.addEventListener('click', () => {
+//   let inputs = cityInput.value.split(',');
+//   inputs = inputs.map((item) => item.trim());
+//   getWeatherData(...inputs);
+// });
 
-async function getWeatherData(city, state = '', country = '') {
-  const data = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
-  );
-  const json = await data.json();
+// [temperatureBox, cityBox, stateBox, cityInput, stateInput, searchBtn].forEach(
+//   (box) => body.appendChild(box)
+// );
 
-  temperatureBox.textContent = json.main.temp;
-  cityBox.textContent = json.name;
-  stateBox.textContent = usCityIds.includes(json.id)
-    ? usCities.filter((city) => city.id === json.id)[0].state
-    : json.sys.country;
-}
-
-getWeatherData('boone', 'nc', 'us');
+// getWeatherData('boone', 'nc', 'us');
 
 /*
 

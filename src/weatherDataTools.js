@@ -9,6 +9,14 @@ function convertToKmh(windSpeed) {
   return Math.round(windSpeed * 1.609);
 }
 
+function convertUvIndex(uvIndex) {
+  if (uvIndex < 3) return 'Low';
+  if (uvIndex < 6) return 'Moderate';
+  if (uvIndex < 8) return 'High';
+  if (uvIndex < 11) return 'Very high';
+  return 'Extreme';
+}
+
 async function getBasicDataSource(city, state, country) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
@@ -57,14 +65,14 @@ function getCurrentData(source) {
   );
   const iconCode = source.current.weather[0].icon;
   const temperature = {
-    f: source.current.temp,
+    f: Math.round(source.current.temp),
     c: convertToCelsius(source.current.temp),
   };
   const feelsLike = {
-    f: source.current.feels_like,
+    f: Math.round(source.current.feels_like),
     c: convertToCelsius(source.current.feels_like),
   };
-  const uvIndex = source.current.uvi;
+  const uvIndex = convertUvIndex(source.current.uvi);
   const sunrise = getLocalDateAndTime(
     source.current.sunrise,
     source.timezone_offset
@@ -74,7 +82,7 @@ function getCurrentData(source) {
     source.timezone_offset
   ).fullTime;
   const windSpeed = {
-    mph: source.current.wind_speed,
+    mph: Math.round(source.current.wind_speed),
     kmh: convertToKmh(source.current.wind_speed),
   };
   const windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
@@ -100,7 +108,7 @@ function getHourlyData(source) {
     const { hour } = getLocalDateAndTime(dataObject.dt, source.timezone_offset);
     const iconCode = dataObject.weather[0].icon;
     const temperature = {
-      f: dataObject.temp,
+      f: Math.round(dataObject.temp),
       c: convertToCelsius(dataObject.temp),
     };
     const chanceOfPrecip = dataObject.pop;
@@ -116,11 +124,11 @@ function getDailyData(source) {
     const { day } = getLocalDateAndTime(dataObject.dt, source.timezone_offset);
     const iconCode = dataObject.weather[0].icon;
     const highTemp = {
-      f: dataObject.temp.max,
+      f: Math.round(dataObject.temp.max),
       c: convertToCelsius(dataObject.temp.max),
     };
     const lowTemp = {
-      f: dataObject.temp.min,
+      f: Math.round(dataObject.temp.min),
       c: convertToCelsius(dataObject.temp.min),
     };
     const chanceOfPrecip = dataObject.pop;
