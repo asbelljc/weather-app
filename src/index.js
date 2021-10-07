@@ -1,4 +1,4 @@
-import './style.scss';
+import './style.sass';
 import 'regenerator-runtime/runtime';
 import countries from './countries.json';
 import usStates from './us-states.json';

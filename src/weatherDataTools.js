@@ -105,7 +105,10 @@ function getCurrentData(source) {
 function getHourlyData(source) {
   const next24Hours = source.hourly.slice(0, 24);
   const hourlyData = next24Hours.map((dataObject) => {
-    const { hour } = getLocalDateAndTime(dataObject.dt, source.timezone_offset);
+    const time = getLocalDateAndTime(
+      dataObject.dt,
+      source.timezone_offset
+    ).fullTime;
     const iconCode = dataObject.weather[0].icon;
     const temperature = {
       f: Math.round(dataObject.temp),
@@ -113,7 +116,7 @@ function getHourlyData(source) {
     };
     const chanceOfPrecip = dataObject.pop;
 
-    return { hour, iconCode, temperature, chanceOfPrecip };
+    return { time, iconCode, temperature, chanceOfPrecip };
   });
 
   return hourlyData;

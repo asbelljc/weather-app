@@ -48,7 +48,7 @@ function makeHourly(weatherData) {
     tile.className = 'hour';
     const time = document.createElement('div');
     time.className = 'time';
-    time.textContent = `0${hour.hour}`;
+    time.textContent = hour.time;
     const icon = document.createElement('img');
     icon.className = 'icon';
     icon.src = require(`./icons/${hour.iconCode}.svg`);
@@ -57,7 +57,7 @@ function makeHourly(weatherData) {
     const raindrop = document.createElement('img');
     raindrop.src = require('./icons/raindrop.svg');
     const percentage = document.createElement('div');
-    percentage.textContent = `${hour.chanceOfPrecip * 100}%`;
+    percentage.textContent = `${Math.round(hour.chanceOfPrecip * 100)}%`;
 
     [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
     [time, icon, precipitation].forEach((elem) => tile.appendChild(elem));
@@ -67,7 +67,7 @@ function makeHourly(weatherData) {
   return hourly;
 }
 
-function loadMain(weatherData) {
+function makeMain(weatherData) {
   const main = document.createElement('div');
   main.className = 'main';
   const header = makeHeader(weatherData);
@@ -75,6 +75,12 @@ function loadMain(weatherData) {
   const hourly = makeHourly(weatherData);
 
   [header, current, hourly].forEach((elem) => main.appendChild(elem));
+
+  return main;
+}
+
+function loadMain(weatherData) {
+  const main = makeMain(weatherData);
 
   document.body.appendChild(main);
 }
