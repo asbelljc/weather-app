@@ -64,6 +64,29 @@ body {
   width: 100%;
   padding: 10px;
   background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.header {
+  text-align: center;
+}
+
+.current {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .icon {
+    width: 50%;
+  }
+
+  .temperature {
+    font-size: clamp(36px, 10vw, 100px);
+  }
+
+  .hi-lo-feel {
+    margin-left: auto;
+  }
 }
 
 .hourly {

@@ -28,8 +28,8 @@ function makeCurrent(weatherData) {
   const hiLoFeel = document.createElement('div');
   hiLoFeel.className = 'hi-lo-feel';
   hiLoFeel.innerText = `
-    ${weatherData.daily[0].highTemp.f} / ${weatherData.daily[0].lowTemp.f}
-    Feels like ${weatherData.current.feelsLike.f}
+    ${weatherData.daily[0].highTemp.f}° / ${weatherData.daily[0].lowTemp.f}°
+    Feels like ${weatherData.current.feelsLike.f}°
   `;
 
   current.appendChild(icon);
