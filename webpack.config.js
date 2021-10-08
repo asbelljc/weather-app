@@ -4,8 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: ['regenerator-runtime/runtime.js', './src/index.js'],
-  devtool: 'inline-source-map',
+  entry: './src/index.js',
+  devtool: 'source-map',
   devServer: {
     static: './dist',
   },
@@ -34,10 +34,12 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
+        generator: { filename: 'Images/[hash][ext][query]' },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        use: 'asset/resource',
+        type: 'asset/resource',
+        generator: { filename: 'Fonts/[hash][ext][query]' },
       },
       {
         test: /\.m?js$/,

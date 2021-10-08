@@ -1,0 +1,105 @@
+/* dosis-200 - latin */
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 200;
+  src: url('./Fonts/dosis-v19-latin-200.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('./Fonts/dosis-v19-latin-200.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/dosis-v19-latin-200.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('./Fonts/dosis-v19-latin-200.woff')
+      format('woff'),
+    /* Modern Browsers */ url('./Fonts/dosis-v19-latin-200.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-200.svg#Dosis')
+      format('svg'); /* Legacy iOS */
+}
+/* dosis-500 - latin */
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./Fonts/dosis-v19-latin-500.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('./Fonts/dosis-v19-latin-500.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/dosis-v19-latin-500.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('./Fonts/dosis-v19-latin-500.woff')
+      format('woff'),
+    /* Modern Browsers */ url('./Fonts/dosis-v19-latin-500.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-500.svg#Dosis')
+      format('svg'); /* Legacy iOS */
+}
+/* dosis-800 - latin */
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./Fonts/dosis-v19-latin-800.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('./Fonts/dosis-v19-latin-800.eot?#iefix') format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/dosis-v19-latin-800.woff2') format('woff2'),
+    /* Super Modern Browsers */ url('./Fonts/dosis-v19-latin-800.woff')
+      format('woff'),
+    /* Modern Browsers */ url('./Fonts/dosis-v19-latin-800.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-800.svg#Dosis')
+      format('svg'); /* Legacy iOS */
+}
+
+$five-hour-width: calc(100% / 5 - 10px * (4 / 5));
+$seven-hour-width: calc(100% / 7 - 10px * (6 / 7));
+
+html {
+  font-family: 'Dosis';
+}
+
+body {
+  width: min(100% - 20px, 1000px);
+  margin: 10px auto;
+}
+
+.main {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hourly {
+  // box-sizing: border-box
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: #{$five-hour-width};
+  @media screen and (min-width: 488px) {
+    min-width: #{$seven-hour-width};
+    // ^ use media queries to adjust this ^
+  }
+
+  .icon {
+    width: 100%;
+  }
+
+  .precipitation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 20px;
+    }
+  }
+}
