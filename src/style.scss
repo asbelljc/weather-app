@@ -47,8 +47,12 @@
       format('svg'); /* Legacy iOS */
 }
 
-$five-hour-width: calc(100% / 5 - 10px * (4 / 5));
-$seven-hour-width: calc(100% / 7 - 10px * (6 / 7));
+$tile-padding: 15px;
+$tile-background: rgba(0, 0, 0, 0.3);
+$tile-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+$hourly-gap: 10px;
+$five-hour-width: calc(100% / 5 - #{$hourly-gap} * (4 / 5));
+$seven-hour-width: calc(100% / 7 - #{$hourly-gap} * (6 / 7));
 
 html {
   font-family: 'Dosis';
@@ -62,9 +66,10 @@ body {
 .main {
   box-sizing: border-box;
   width: 100%;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
+  padding: #{$tile-padding};
+  background: #{$tile-background};
   border-radius: 10px;
+  box-shadow: #{$tile-shadow};
 }
 
 .header {
@@ -85,6 +90,7 @@ body {
   }
 
   .hi-lo-feel {
+    text-align: right;
     margin-left: auto;
   }
 }
@@ -92,7 +98,7 @@ body {
 .hourly {
   // box-sizing: border-box
   display: flex;
-  gap: 10px;
+  gap: #{$hourly-gap};
   width: 100%;
   overflow: auto;
   scrollbar-width: none;
