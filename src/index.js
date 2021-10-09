@@ -6,7 +6,7 @@ import usCities from './us-cities.json';
 import getWeatherData from './weatherDataTools';
 import loadMain from './mainTile';
 
-getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
+getWeatherData('Brevard', 'NC', 'US').then((data) => {
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
   document.documentElement.style.backgroundImage = `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
      url(${background})`;

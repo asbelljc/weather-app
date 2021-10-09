@@ -40,35 +40,40 @@ function makeCurrent(weatherData) {
   return current;
 }
 
+function makeHour(hourData) {
+  const tile = document.createElement('div');
+  tile.className = 'hour';
+  const time = document.createElement('div');
+  time.className = 'time';
+  time.textContent = hourData.time;
+  const icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = require(`./Icons/${hourData.iconCode}.svg`);
+  const temperature = document.createElement('div');
+  temperature.className = 'temperature';
+  temperature.textContent = `${hourData.temperature.f}°`;
+  const precipitation = document.createElement('div');
+  precipitation.className = 'precipitation';
+  const raindrop = document.createElement('img');
+  raindrop.src = require('./Icons/Static/raindrop.svg');
+  const percentage = document.createElement('div');
+  percentage.textContent = `${Math.round(hourData.chanceOfPrecip * 100)}%`;
+
+  [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
+  [time, icon, temperature, precipitation].forEach((elem) =>
+    tile.appendChild(elem)
+  );
+
+  return tile;
+}
+
 function makeHourly(weatherData) {
   const hourly = document.createElement('div');
   hourly.className = 'hourly';
+  const hours = weatherData.hourly.map(makeHour);
 
-  weatherData.hourly.forEach((hour) => {
-    const tile = document.createElement('div');
-    tile.className = 'hour';
-    const time = document.createElement('div');
-    time.className = 'time';
-    time.textContent = hour.time;
-    const icon = document.createElement('img');
-    icon.className = 'icon';
-    icon.src = require(`./Icons/${hour.iconCode}.svg`);
-    const temperature = document.createElement('div');
-    temperature.className = 'temperature';
-    temperature.textContent = `${hour.temperature.f}°`;
-    const precipitation = document.createElement('div');
-    precipitation.className = 'precipitation';
-    const raindrop = document.createElement('img');
-    raindrop.src = require('./Icons/Static/raindrop.svg');
-    const percentage = document.createElement('div');
-    percentage.textContent = `${Math.round(hour.chanceOfPrecip * 100)}%`;
-
-    [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
-    [time, icon, temperature, precipitation].forEach((elem) =>
-      tile.appendChild(elem)
-    );
-
-    hourly.appendChild(tile);
+  hours.forEach((hour) => {
+    hourly.appendChild(hour);
   });
 
   return hourly;
