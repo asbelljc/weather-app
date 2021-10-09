@@ -47,12 +47,13 @@
       format('svg'); /* Legacy iOS */
 }
 
-$tile-padding: 15px;
+$tile-padding: min(4.4%, 30px);
 $tile-background: rgba(0, 0, 0, 0.5);
 $tile-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 $secondary-color: rgba(150, 150, 150);
 $hourly-gap: 10px;
 $five-hour-width: calc(100% / 5 - $hourly-gap * (4 / 5));
+$six-hour-width: calc(100% / 6 - $hourly-gap * (5 / 6));
 $seven-hour-width: calc(100% / 7 - $hourly-gap * (6 / 7));
 
 html {
@@ -80,7 +81,7 @@ body {
   padding: $tile-padding;
   background: $tile-background;
   border-radius: 10px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
   // box-shadow: #{$tile-shadow};
 }
 
@@ -109,6 +110,7 @@ body {
 
   .info {
     display: flex;
+    align-items: center;
   }
 
   .temperature {
@@ -143,7 +145,10 @@ body {
   flex-direction: column;
   align-items: center;
   min-width: $five-hour-width;
-  @media screen and (min-width: 488px) {
+  @media screen and (min-width: 550px) {
+    min-width: $six-hour-width;
+  }
+  @media screen and (min-width: 750px) {
     min-width: $seven-hour-width;
     // ^ use media queries to adjust this ^
   }
