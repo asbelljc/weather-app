@@ -100,11 +100,15 @@ body {
 
 .current {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 
   .icon {
     width: min(35%, 300px);
+  }
+
+  .info {
+    display: flex;
   }
 
   .temperature {

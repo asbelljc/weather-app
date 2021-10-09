@@ -22,6 +22,8 @@ function makeCurrent(weatherData) {
   const icon = document.createElement('img');
   icon.className = 'icon';
   icon.src = require(`./Icons/${weatherData.current.iconCode}.svg`);
+  const info = document.createElement('div');
+  info.className = 'info';
   const temperature = document.createElement('div');
   temperature.className = 'temperature';
   temperature.textContent = `${weatherData.current.temperature.f}°`;
@@ -30,9 +32,10 @@ function makeCurrent(weatherData) {
   hiLoFeel.innerText = `${weatherData.daily[0].highTemp.f}° / ${weatherData.daily[0].lowTemp.f}°
     Feels like ${weatherData.current.feelsLike.f}°`;
 
+  info.appendChild(temperature);
+  info.appendChild(hiLoFeel);
   current.appendChild(icon);
-  current.appendChild(temperature);
-  current.appendChild(hiLoFeel);
+  current.appendChild(info);
 
   return current;
 }
@@ -49,7 +52,7 @@ function makeHourly(weatherData) {
     time.textContent = hour.time;
     const icon = document.createElement('img');
     icon.className = 'icon';
-    icon.src = require(`./Icons/Static/${hour.iconCode}.svg`);
+    icon.src = require(`./Icons/${hour.iconCode}.svg`);
     const temperature = document.createElement('div');
     temperature.className = 'temperature';
     temperature.textContent = `${hour.temperature.f}°`;
