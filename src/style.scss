@@ -46,11 +46,30 @@
     /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-800.svg#Dosis')
       format('svg'); /* Legacy iOS */
 }
+/* ubuntu-mono-regular - latin */
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./Fonts/ubuntu-mono-v10-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+    url('./Fonts/ubuntu-mono-v10-latin-regular.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/ubuntu-mono-v10-latin-regular.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./Fonts/ubuntu-mono-v10-latin-regular.woff') format('woff'),
+    /* Modern Browsers */ url('./Fonts/ubuntu-mono-v10-latin-regular.ttf')
+      format('truetype'),
+    /* Safari, Android, iOS */
+      url('./Fonts/ubuntu-mono-v10-latin-regular.svg#UbuntuMono') format('svg'); /* Legacy iOS */
+}
+/* ubuntu-mono-700 - latin */
 
-$tile-padding: min(4.4%, 30px);
-$tile-background: rgba(0, 0, 0, 0.5);
+$tile-padding: clamp(15px, 4.4%, 30px);
+$tile-background: rgba(0, 0, 0, 0.6);
 $tile-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-$secondary-color: rgba(150, 150, 150);
+$secondary-color: rgba(160, 160, 160);
 $hourly-gap: 10px;
 $five-hour-width: calc(100% / 5 - $hourly-gap * (4 / 5));
 $six-hour-width: calc(100% / 6 - $hourly-gap * (5 / 6));
@@ -142,6 +161,10 @@ body {
   }
 }
 
+.daily-info {
+  margin: -8px 0; // tweak for visuals on this one tile
+}
+
 .hour {
   display: flex;
   flex-direction: column;
@@ -171,16 +194,28 @@ body {
 }
 
 .day {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template: 1fr / 1fr 100px 1fr;
   align-items: center;
+  width: 100%;
+
+  .name {
+    text-align: left;
+  }
 
   .weather {
     display: flex;
+    justify-content: flex-end;
+
+    .icon {
+      width: 50px;
+    }
   }
 
   .hi-lo {
-    font-family: monospace; // this will need adjustment...
+    text-align: right;
+    font-family: 'Ubuntu Mono', monospace;
+    font-weight: 400;
   }
 }
 
