@@ -49,14 +49,14 @@ function makeHourly(weatherData) {
     time.textContent = hour.time;
     const icon = document.createElement('img');
     icon.className = 'icon';
-    icon.src = require(`./Icons/${hour.iconCode}.svg`);
+    icon.src = require(`./Icons/Static/${hour.iconCode}.svg`);
     const temperature = document.createElement('div');
     temperature.className = 'temperature';
     temperature.textContent = `${hour.temperature.f}°`;
     const precipitation = document.createElement('div');
     precipitation.className = 'precipitation';
     const raindrop = document.createElement('img');
-    raindrop.src = require('./Icons/raindrop.svg');
+    raindrop.src = require('./Icons/Static/raindrop.svg');
     const percentage = document.createElement('div');
     percentage.textContent = `${Math.round(hour.chanceOfPrecip * 100)}%`;
 
