@@ -5,12 +5,15 @@ import usStates from './us-states.json';
 import usCities from './us-cities.json';
 import getWeatherData from './weatherDataTools';
 import loadMain from './mainTile';
+import loadDaily from './dailyTile';
 
 getWeatherData('Brevard', 'NC', 'US').then((data) => {
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
-  document.documentElement.style.backgroundImage = `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
-     url(${background})`;
+  document.documentElement.style.backgroundImage = `url(${background})`;
+  // document.documentElement.style.backgroundImage = `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${background})`;
   loadMain(data);
+  loadDaily(data);
+  console.log(data);
 });
 
 // const usCityIds = Array.from(usCities, (city) => city.id);

@@ -79,7 +79,7 @@ function makeHourly(weatherData) {
 
 function makeMain(weatherData) {
   const main = document.createElement('div');
-  main.className = 'main';
+  main.className = 'tile';
   const header = makeHeader(weatherData);
   const current = makeCurrent(weatherData);
   const hourly = makeHourly(weatherData);

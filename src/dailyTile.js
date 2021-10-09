@@ -26,7 +26,7 @@ function makeDay(dayData) {
   const weather = makeWeatherPanel(dayData);
   const hiLo = document.createElement('div');
   hiLo.className = 'hi-lo';
-  hiLo.textcontent = `${dayData.highTemp}°/${dayData.lowTemp}°`;
+  hiLo.innerText = `${dayData.highTemp.f}°/${dayData.lowTemp.f}°`;
 
   [name, weather, hiLo].forEach((elem) => day.appendChild(elem));
 
@@ -35,7 +35,7 @@ function makeDay(dayData) {
 
 function makeDaily(weatherData) {
   const daily = document.createElement('div');
-  daily.className = 'daily';
+  daily.className = 'tile';
   const dailyInfo = document.createElement('div');
   dailyInfo.className = 'daily-info';
   const days = weatherData.daily.map(makeDay);

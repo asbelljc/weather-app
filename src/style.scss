@@ -71,18 +71,21 @@ html {
 }
 
 body {
+  display: flex;
+  // gap: 10px;
+  flex-direction: column;
   width: min(100% - 20px, 1000px);
   margin: 10px auto;
 }
 
-.main {
+.tile {
   box-sizing: border-box;
   width: 100%;
+  margin-bottom: 10px;
   padding: $tile-padding;
   background: $tile-background;
   border-radius: 10px;
   backdrop-filter: blur(10px);
-  // box-shadow: #{$tile-shadow};
 }
 
 .header {
@@ -128,7 +131,6 @@ body {
 }
 
 .hourly {
-  // box-sizing: border-box
   display: flex;
   gap: $hourly-gap;
   width: 100%;
@@ -150,7 +152,6 @@ body {
   }
   @media screen and (min-width: 750px) {
     min-width: $seven-hour-width;
-    // ^ use media queries to adjust this ^
   }
 
   .time {
@@ -167,21 +168,35 @@ body {
     font-size: clamp(18px, 5vw, 24px);
     font-weight: 800;
   }
+}
 
-  .precipitation {
+.day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .weather {
     display: flex;
-    align-items: center;
-    justify-content: center;
+  }
 
-    img {
-      width: 20px;
-      margin: 0 -6%;
-    }
+  .hi-lo {
+    font-family: monospace; // this will need adjustment...
+  }
+}
 
-    div {
-      font-size: 14px;
-      font-weight: 500;
-      color: $secondary-color;
-    }
+.precipitation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 20px;
+    margin: 0 -6%;
+  }
+
+  div {
+    font-size: 14px;
+    font-weight: 500;
+    color: $secondary-color;
   }
 }
