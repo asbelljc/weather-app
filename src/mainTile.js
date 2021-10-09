@@ -60,9 +60,9 @@ function makeHour(hourData) {
   percentage.textContent = `${Math.round(hourData.chanceOfPrecip * 100)}%`;
 
   [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
-  [time, icon, temperature, precipitation].forEach((elem) =>
-    tile.appendChild(elem)
-  );
+  [time, icon, temperature, precipitation].forEach((elem) => {
+    tile.appendChild(elem);
+  });
 
   return tile;
 }
@@ -72,9 +72,7 @@ function makeHourly(weatherData) {
   hourly.className = 'hourly';
   const hours = weatherData.hourly.map(makeHour);
 
-  hours.forEach((hour) => {
-    hourly.appendChild(hour);
-  });
+  hours.forEach((hour) => hourly.appendChild(hour));
 
   return hourly;
 }
