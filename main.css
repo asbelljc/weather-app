@@ -31,20 +31,93 @@
   src: local(""), url(Fonts/398ba35886a8860c40aa.eot?#iefix) format("embedded-opentype"), url(Fonts/49532ee447395a63aa1b.woff2) format("woff2"), url(Fonts/abbce9fbc559e0667ae2.woff) format("woff"), url(Fonts/d38320b5cde39666ed4b.ttf) format("truetype"), url(Images/52970973365884b51d90.svg#Dosis) format("svg");
   /* Legacy iOS */
 }
+/* ubuntu-mono-regular - latin */
+@font-face {
+  font-family: "Ubuntu Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url(Fonts/e6dab3431cff25c88992.eot);
+  /* IE9 Compat Modes */
+  src: local(""), url(Fonts/e6dab3431cff25c88992.eot?#iefix) format("embedded-opentype"), url(Fonts/fc77a86efb8c0ff2b73e.woff2) format("woff2"), url(Fonts/2f1e7025def086a5cb35.woff) format("woff"), url(Fonts/d10d8589fdd0d80d2529.ttf) format("truetype"), url(Images/acd71f99504b60e0d185.svg#UbuntuMono) format("svg");
+  /* Legacy iOS */
+}
+/* ubuntu-mono-700 - latin */
 html {
   font-family: "Dosis";
+  color: white;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 body {
+  display: grid;
+  grid-template: "a" auto "b" auto "c" auto/100%;
+  gap: 10px;
   width: min(100% - 20px, 1000px);
-  margin: 10px auto;
+  margin: auto;
+  padding: 10px;
+}
+@media screen and (min-width: 650px) {
+  body {
+    grid-template: "a a" auto "b c" auto/1fr 1fr;
+  }
 }
 
-.main {
+.tile {
   box-sizing: border-box;
   width: 100%;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
+  padding: clamp(15px, 4.4%, 30px);
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+.tile:nth-child(1) {
+  grid-area: a;
+}
+
+.header {
+  text-align: center;
+}
+
+.place-name {
+  margin: 0;
+  font-size: min(6vw, 48px);
+}
+
+.date-and-time {
+  font-size: clamp(14px, 3.8vw, 18px);
+  color: #a0a0a0;
+}
+
+.current {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.current .icon {
+  width: min(35%, 300px);
+}
+.current .info {
+  display: flex;
+  align-items: center;
+}
+.current .temperature {
+  margin: 0 10px;
+  font-size: clamp(36px, 10vw, 100px);
+  font-weight: 500;
+}
+.current .hi-lo-feel {
+  margin: 0 10px;
+  font-size: min(5vw, 24px);
+  font-weight: 500;
+  color: #a0a0a0;
 }
 
 .hourly {
@@ -59,27 +132,107 @@ body {
   display: none;
 }
 
+.daily {
+  margin: -8px 0;
+}
+
 .hour {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: calc(20% - 8px);
 }
-@media screen and (min-width: 488px) {
+@media screen and (min-width: 550px) {
+  .hour {
+    min-width: calc(16.6666666667% - 8.3333333333px);
+  }
+}
+@media screen and (min-width: 750px) {
   .hour {
     min-width: calc(14.2857142857% - 8.5714285714px);
   }
 }
+.hour .time {
+  font-size: clamp(14px, 3.8vw, 18px);
+  font-weight: 500;
+  color: #a0a0a0;
+}
 .hour .icon {
   width: 100%;
 }
-.hour .precipitation {
+.hour .temperature {
+  font-size: clamp(18px, 5vw, 24px);
+  font-weight: 800;
+}
+
+.day {
+  display: grid;
+  grid-template: 1fr/1fr 100px 1fr;
+  align-items: center;
+  margin: -4px 0;
+  width: 100%;
+}
+.day .name {
+  text-align: left;
+}
+.day .weather {
+  display: flex;
+  justify-content: flex-end;
+}
+.day .weather .icon {
+  width: 50px;
+}
+.day .hi-lo {
+  text-align: right;
+  font-family: "Ubuntu Mono", monospace;
+  font-weight: 400;
+}
+
+.precipitation {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.hour .precipitation img {
+.precipitation img {
   width: 20px;
+  margin: 0 -6%;
+}
+.precipitation div {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a0a0a0;
+}
+
+.auxiliary {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
+}
+
+.aux-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+.aux-item:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.aux-item .icon {
+  width: 40px;
+}
+.aux-item .name {
+  margin-left: 10px;
+  color: #a0a0a0;
+}
+.aux-item .readout {
+  margin-left: auto;
+  display: flex;
+}
+.aux-item .readout img {
+  width: 15px;
+  margin-right: 5px;
 }
 
 /*# sourceMappingURL=main.css.map*/
