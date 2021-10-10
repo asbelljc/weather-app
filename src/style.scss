@@ -1,3 +1,4 @@
+// PROBABLY DON'T NEED THIS 200-weight ONE ANYMORE!
 /* dosis-200 - latin */
 @font-face {
   font-family: 'Dosis';
@@ -69,7 +70,7 @@
 $tile-padding: clamp(15px, 4.4%, 30px);
 $tile-background: rgba(0, 0, 0, 0.6);
 $tile-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-$secondary-color: rgba(160, 160, 160);
+$secondary-color: rgb(160, 160, 160);
 $hourly-gap: 10px;
 $five-hour-width: calc(100% / 5 - $hourly-gap * (4 / 5));
 $six-hour-width: calc(100% / 6 - $hourly-gap * (5 / 6));
@@ -90,21 +91,32 @@ html {
 }
 
 body {
-  display: flex;
-  // gap: 10px;
-  flex-direction: column;
+  display: grid;
+  grid-template:
+    'a' auto
+    'b' auto
+    'c' auto / 100%;
+  gap: 10px;
   width: min(100% - 20px, 1000px);
-  margin: 10px auto;
+  margin: auto;
+  padding: 10px;
+  @media screen and (min-width: 650px) {
+    grid-template:
+      'a a' auto
+      'b c' auto / 1fr 1fr;
+  }
 }
 
 .tile {
   box-sizing: border-box;
   width: 100%;
-  margin-bottom: 10px;
   padding: $tile-padding;
   background: $tile-background;
   border-radius: 10px;
   backdrop-filter: blur(10px);
+  &:nth-child(1) {
+    grid-area: a;
+  }
 }
 
 .header {
@@ -237,12 +249,20 @@ body {
   }
 }
 
+.auxiliary {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
+}
+
 .aux-item {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-grow: 1;
   &:not(:last-child) {
-    border-bottom: 1px solid $secondary-color;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   }
 
   .icon {
@@ -250,7 +270,8 @@ body {
   }
 
   .name {
-    margin-left: 5px;
+    margin-left: 10px;
+    color: $secondary-color;
   }
 
   .readout {
@@ -258,6 +279,7 @@ body {
     display: flex;
 
     img {
+      // wind arrow
       width: 15px;
       margin-right: 5px;
     }
