@@ -4,7 +4,7 @@ function makeWeatherPanel(dayData) {
   const precipitation = document.createElement('div');
   precipitation.className = 'precipitation';
   const raindrop = document.createElement('img');
-  raindrop.src = require('./Icons/Static/raindrop.svg');
+  raindrop.src = require('./Icons/raindrop.svg');
   const percentage = document.createElement('div');
   percentage.textContent = `${Math.round(dayData.chanceOfPrecip * 100)}%`;
   const icon = document.createElement('img');
@@ -37,7 +37,7 @@ function makeDaily(weatherData) {
   const daily = document.createElement('div');
   daily.className = 'tile';
   const dailyInfo = document.createElement('div');
-  dailyInfo.className = 'daily-info';
+  dailyInfo.className = 'daily';
   const days = weatherData.daily.map(makeDay);
 
   days.forEach((day) => dailyInfo.appendChild(day));

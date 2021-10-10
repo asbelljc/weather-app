@@ -68,15 +68,7 @@ TO DO
 [ ] Make country dropdown box using countries.json
 [ ] Make state dropdown that only activates if USA is selected
 [ ] Make city text input
-[x] Implement 'One Call API' (harvest lat./long. values from other api call first!)
-[ ] Figure out how to display...
-    - current conditions (weather, temp, visibility, today's hi/lo, 'Feels like')
-    - hourly forecast (weather, precip chance, temp)
-    - 7-day forecast (day AND night weather, precip chance, hi/lo temp)
-    - UV index
-    - sunrise/sunset
-    - wind speed and direction
-    - humidity
 [ ] Add error handling for rejected calls and missing data fields
+[ ] Make clock update every minute, weather data every 15 minutes
 
 */

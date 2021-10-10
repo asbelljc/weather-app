@@ -82,8 +82,8 @@ function getCurrentData(source) {
     source.timezone_offset
   ).fullTime;
   const windSpeed = {
-    mph: Math.round(source.current.wind_speed),
-    kmh: convertToKmh(source.current.wind_speed),
+    mph: `${Math.round(source.current.wind_speed)} mph`,
+    kmh: `${convertToKmh(source.current.wind_speed)} km/h`,
   };
   const windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
   const { humidity } = source.current;

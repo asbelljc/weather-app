@@ -3,7 +3,7 @@ function makeHeader(weatherData) {
 
   const header = document.createElement('div');
   header.className = 'header';
-  const placeName = document.createElement('h1');
+  const placeName = document.createElement('h2');
   placeName.className = 'place-name';
   placeName.textContent = `${weatherData.city}, ${state}`;
   const dateAndTime = document.createElement('div');
@@ -55,7 +55,7 @@ function makeHour(hourData) {
   const precipitation = document.createElement('div');
   precipitation.className = 'precipitation';
   const raindrop = document.createElement('img');
-  raindrop.src = require('./Icons/Static/raindrop.svg');
+  raindrop.src = require('./Icons/raindrop.svg');
   const percentage = document.createElement('div');
   percentage.textContent = `${Math.round(hourData.chanceOfPrecip * 100)}%`;
 
