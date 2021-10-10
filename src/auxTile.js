@@ -3,7 +3,7 @@ function makePanel(name, readoutDiv) {
   panel.className = 'aux-item';
   const icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = `./Icons/${name}.svg`;
+  icon.src = require(`./Icons/${name}.svg`);
   const nameBox = document.createElement('div');
   nameBox.className = 'name';
   nameBox.textContent = name;
@@ -34,15 +34,15 @@ function makeAuxiliary(weatherData) {
   const windReadout = document.createElement('div');
   windReadout.className = 'readout';
   const direction = document.createElement('img');
-  direction.src = './Icons/arrow.svg';
+  direction.src = require('./Icons/arrow.svg');
   direction.style.transform = `rotate(${weatherData.current.windDirection}deg)`;
   const speed = document.createElement('div');
-  speed.textContent = weatherData.current.windSpeed;
+  speed.textContent = weatherData.current.windSpeed.mph;
   [direction, speed].forEach((elem) => windReadout.appendChild(elem));
 
   const humidityReadout = document.createElement('div');
   humidityReadout.className = 'readout';
-  humidityReadout.textContent = weatherData.current.humidity;
+  humidityReadout.textContent = `${weatherData.current.humidity}%`;
 
   const [uv, sunrise, sunset, wind, humidity] = [
     ['UV Index', uvReadout],
@@ -50,7 +50,7 @@ function makeAuxiliary(weatherData) {
     ['Sunset', sunsetReadout],
     ['Wind', windReadout],
     ['Humidity', humidityReadout],
-  ].forEach((auxItem) => makePanel(...auxItem));
+  ].map((auxItem) => makePanel(...auxItem));
 
   [uv, sunrise, sunset, wind, humidity].forEach((elem) =>
     auxInfo.appendChild(elem)

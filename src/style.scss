@@ -162,7 +162,7 @@ body {
 }
 
 .daily {
-  margin: -8px 0; // tweak for visuals on this one tile
+  margin: -8px 0; // tweak for visuals
 }
 
 .hour {
@@ -197,7 +197,7 @@ body {
   display: grid;
   grid-template: 1fr / 1fr 100px 1fr;
   align-items: center;
-  margin: -4px 0;
+  margin: -4px 0; // tweak for visuals
   width: 100%;
 
   .name {
@@ -234,5 +234,32 @@ body {
     font-size: 14px;
     font-weight: 500;
     color: $secondary-color;
+  }
+}
+
+.aux-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:not(:last-child) {
+    border-bottom: 1px solid $secondary-color;
+  }
+
+  .icon {
+    width: 40px;
+  }
+
+  .name {
+    margin-left: 5px;
+  }
+
+  .readout {
+    margin-left: auto;
+    display: flex;
+
+    img {
+      width: 15px;
+      margin-right: 5px;
+    }
   }
 }

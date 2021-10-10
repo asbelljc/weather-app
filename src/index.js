@@ -6,12 +6,14 @@ import usCities from './us-cities.json';
 import getWeatherData from './weatherDataTools';
 import loadMain from './mainTile';
 import loadDaily from './dailyTile';
+import loadAuxiliary from './auxTile';
 
-getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
+getWeatherData('Great Falls', 'MT', 'US').then((data) => {
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
   document.documentElement.style.backgroundImage = `url(${background})`;
   loadMain(data);
   loadDaily(data);
+  loadAuxiliary(data);
 });
 
 // const usCityIds = Array.from(usCities, (city) => city.id);
