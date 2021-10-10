@@ -1,6 +1,176 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/auxTile.js":
+/*!************************!*\
+  !*** ./src/auxTile.js ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function makePanel(name, readoutDiv) {
+  var panel = document.createElement('div');
+  panel.className = 'aux-item';
+  var icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(name, ".svg"));
+  var nameBox = document.createElement('div');
+  nameBox.className = 'name';
+  nameBox.textContent = name;
+  [icon, nameBox, readoutDiv].forEach(function (elem) {
+    return panel.appendChild(elem);
+  });
+  return panel;
+}
+
+function makeAuxiliary(weatherData) {
+  var auxiliary = document.createElement('div');
+  auxiliary.className = 'tile';
+  var auxInfo = document.createElement('div');
+  auxInfo.className = 'auxiliary';
+  var uvReadout = document.createElement('div');
+  uvReadout.className = 'readout';
+  uvReadout.textContent = weatherData.current.uvIndex;
+  var sunriseReadout = document.createElement('div');
+  sunriseReadout.className = 'readout';
+  sunriseReadout.textContent = weatherData.current.sunrise;
+  var sunsetReadout = document.createElement('div');
+  sunsetReadout.className = 'readout';
+  sunsetReadout.textContent = weatherData.current.sunset;
+  var windReadout = document.createElement('div');
+  windReadout.className = 'readout';
+  var direction = document.createElement('img');
+  direction.src = __webpack_require__(/*! ./Icons/arrow.svg */ "./src/Icons/arrow.svg");
+  direction.style.transform = "rotate(".concat(weatherData.current.windDirection, "deg)");
+  var speed = document.createElement('div');
+  speed.textContent = weatherData.current.windSpeed.mph;
+  [direction, speed].forEach(function (elem) {
+    return windReadout.appendChild(elem);
+  });
+  var humidityReadout = document.createElement('div');
+  humidityReadout.className = 'readout';
+  humidityReadout.textContent = "".concat(weatherData.current.humidity, "%");
+
+  var _map = [['UV Index', uvReadout], ['Sunrise', sunriseReadout], ['Sunset', sunsetReadout], ['Wind', windReadout], ['Humidity', humidityReadout]].map(function (auxItem) {
+    return makePanel.apply(void 0, _toConsumableArray(auxItem));
+  }),
+      _map2 = _slicedToArray(_map, 5),
+      uv = _map2[0],
+      sunrise = _map2[1],
+      sunset = _map2[2],
+      wind = _map2[3],
+      humidity = _map2[4];
+
+  [uv, sunrise, sunset, wind, humidity].forEach(function (elem) {
+    return auxInfo.appendChild(elem);
+  });
+  auxiliary.appendChild(auxInfo);
+  return auxiliary;
+}
+
+function loadAuxiliary(weatherData) {
+  var auxiliary = makeAuxiliary(weatherData);
+  document.body.appendChild(auxiliary);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (loadAuxiliary);
+
+/***/ }),
+
+/***/ "./src/dailyTile.js":
+/*!**************************!*\
+  !*** ./src/dailyTile.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function makeWeatherPanel(dayData) {
+  var weatherPanel = document.createElement('div');
+  weatherPanel.className = 'weather';
+  var precipitation = document.createElement('div');
+  precipitation.className = 'precipitation';
+  var raindrop = document.createElement('img');
+  raindrop.src = __webpack_require__(/*! ./Icons/raindrop.svg */ "./src/Icons/raindrop.svg");
+  var percentage = document.createElement('div');
+  percentage.textContent = "".concat(Math.round(dayData.chanceOfPrecip * 100), "%");
+  var icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(dayData.iconCode, ".svg"));
+  [raindrop, percentage].forEach(function (elem) {
+    return precipitation.appendChild(elem);
+  });
+  [precipitation, icon].forEach(function (elem) {
+    return weatherPanel.appendChild(elem);
+  });
+  return weatherPanel;
+}
+
+function makeDay(dayData) {
+  var day = document.createElement('div');
+  day.className = 'day';
+  var name = document.createElement('div');
+  name.className = 'name';
+  name.textContent = "".concat(dayData.day);
+  var weather = makeWeatherPanel(dayData);
+  var hiLo = document.createElement('div');
+  hiLo.className = 'hi-lo';
+  hiLo.innerText = "".concat(dayData.highTemp.f, "\xB0/").concat(dayData.lowTemp.f, "\xB0");
+  [name, weather, hiLo].forEach(function (elem) {
+    return day.appendChild(elem);
+  });
+  return day;
+}
+
+function makeDaily(weatherData) {
+  var daily = document.createElement('div');
+  daily.className = 'tile';
+  var dailyInfo = document.createElement('div');
+  dailyInfo.className = 'daily';
+  var days = weatherData.daily.map(makeDay);
+  days.forEach(function (day) {
+    return dailyInfo.appendChild(day);
+  });
+  daily.appendChild(dailyInfo);
+  return daily;
+}
+
+function loadDaily(weatherData) {
+  var daily = makeDaily(weatherData);
+  document.body.appendChild(daily);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (loadDaily);
+
+/***/ }),
+
 /***/ "./src/mainTile.js":
 /*!*************************!*\
   !*** ./src/mainTile.js ***!
@@ -16,7 +186,7 @@ function makeHeader(weatherData) {
   var state = weatherData.state ? weatherData.state : weatherData.country;
   var header = document.createElement('div');
   header.className = 'header';
-  var placeName = document.createElement('h1');
+  var placeName = document.createElement('h2');
   placeName.className = 'place-name';
   placeName.textContent = "".concat(weatherData.city, ", ").concat(state);
   var dateAndTime = document.createElement('div');
@@ -32,51 +202,62 @@ function makeCurrent(weatherData) {
   current.className = 'current';
   var icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = __webpack_require__("./src/icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(weatherData.current.iconCode, ".svg"));
+  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(weatherData.current.iconCode, ".svg"));
+  var info = document.createElement('div');
+  info.className = 'info';
   var temperature = document.createElement('div');
   temperature.className = 'temperature';
   temperature.textContent = "".concat(weatherData.current.temperature.f, "\xB0");
   var hiLoFeel = document.createElement('div');
   hiLoFeel.className = 'hi-lo-feel';
-  hiLoFeel.innerText = "\n    ".concat(weatherData.daily[0].highTemp.f, " / ").concat(weatherData.daily[0].lowTemp.f, "\n    Feels like ").concat(weatherData.current.feelsLike.f, "\n  ");
+  hiLoFeel.innerText = "".concat(weatherData.daily[0].highTemp.f, "\xB0 / ").concat(weatherData.daily[0].lowTemp.f, "\xB0\n    Feels like ").concat(weatherData.current.feelsLike.f, "\xB0");
+  info.appendChild(temperature);
+  info.appendChild(hiLoFeel);
   current.appendChild(icon);
-  current.appendChild(temperature);
-  current.appendChild(hiLoFeel);
+  current.appendChild(info);
   return current;
+}
+
+function makeHour(hourData) {
+  var tile = document.createElement('div');
+  tile.className = 'hour';
+  var time = document.createElement('div');
+  time.className = 'time';
+  time.textContent = hourData.time;
+  var icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(hourData.iconCode, ".svg"));
+  var temperature = document.createElement('div');
+  temperature.className = 'temperature';
+  temperature.textContent = "".concat(hourData.temperature.f, "\xB0");
+  var precipitation = document.createElement('div');
+  precipitation.className = 'precipitation';
+  var raindrop = document.createElement('img');
+  raindrop.src = __webpack_require__(/*! ./Icons/raindrop.svg */ "./src/Icons/raindrop.svg");
+  var percentage = document.createElement('div');
+  percentage.textContent = "".concat(Math.round(hourData.chanceOfPrecip * 100), "%");
+  [raindrop, percentage].forEach(function (elem) {
+    return precipitation.appendChild(elem);
+  });
+  [time, icon, temperature, precipitation].forEach(function (elem) {
+    tile.appendChild(elem);
+  });
+  return tile;
 }
 
 function makeHourly(weatherData) {
   var hourly = document.createElement('div');
   hourly.className = 'hourly';
-  weatherData.hourly.forEach(function (hour) {
-    var tile = document.createElement('div');
-    tile.className = 'hour';
-    var time = document.createElement('div');
-    time.className = 'time';
-    time.textContent = hour.time;
-    var icon = document.createElement('img');
-    icon.className = 'icon';
-    icon.src = __webpack_require__("./src/icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(hour.iconCode, ".svg"));
-    var precipitation = document.createElement('div');
-    precipitation.className = 'precipitation';
-    var raindrop = document.createElement('img');
-    raindrop.src = __webpack_require__(/*! ./icons/raindrop.svg */ "./src/icons/raindrop.svg");
-    var percentage = document.createElement('div');
-    percentage.textContent = "".concat(Math.round(hour.chanceOfPrecip * 100), "%");
-    [raindrop, percentage].forEach(function (elem) {
-      return precipitation.appendChild(elem);
-    });
-    [time, icon, precipitation].forEach(function (elem) {
-      return tile.appendChild(elem);
-    });
-    hourly.appendChild(tile);
+  var hours = weatherData.hourly.map(makeHour);
+  hours.forEach(function (hour) {
+    return hourly.appendChild(hour);
   });
   return hourly;
 }
 
 function makeMain(weatherData) {
   var main = document.createElement('div');
-  main.className = 'main';
+  main.className = 'tile';
   var header = makeHeader(weatherData);
   var current = makeCurrent(weatherData);
   var hourly = makeHourly(weatherData);
@@ -350,8 +531,8 @@ function getCurrentData(source) {
   var sunrise = (0,_timeTools__WEBPACK_IMPORTED_MODULE_1__["default"])(source.current.sunrise, source.timezone_offset).fullTime;
   var sunset = (0,_timeTools__WEBPACK_IMPORTED_MODULE_1__["default"])(source.current.sunset, source.timezone_offset).fullTime;
   var windSpeed = {
-    mph: Math.round(source.current.wind_speed),
-    kmh: convertToKmh(source.current.wind_speed)
+    mph: "".concat(Math.round(source.current.wind_speed), " mph"),
+    kmh: "".concat(convertToKmh(source.current.wind_speed), " km/h")
   };
   var windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
 
@@ -1251,32 +1432,31 @@ try {
 
 /***/ }),
 
-/***/ "./src/icons sync recursive ^\\.\\/.*\\.svg$":
-/*!***************************************!*\
-  !*** ./src/icons/ sync ^\.\/.*\.svg$ ***!
-  \***************************************/
+/***/ "./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$":
+/*!*********************************************!*\
+  !*** ./src/Backgrounds/ sync ^\.\/.*\.jpg$ ***!
+  \*********************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
-	"./01d.svg": "./src/icons/01d.svg",
-	"./01n.svg": "./src/icons/01n.svg",
-	"./02d.svg": "./src/icons/02d.svg",
-	"./02n.svg": "./src/icons/02n.svg",
-	"./03d.svg": "./src/icons/03d.svg",
-	"./03n.svg": "./src/icons/03n.svg",
-	"./04d.svg": "./src/icons/04d.svg",
-	"./04n.svg": "./src/icons/04n.svg",
-	"./09d.svg": "./src/icons/09d.svg",
-	"./09n.svg": "./src/icons/09n.svg",
-	"./10d.svg": "./src/icons/10d.svg",
-	"./10n.svg": "./src/icons/10n.svg",
-	"./11d.svg": "./src/icons/11d.svg",
-	"./11n.svg": "./src/icons/11n.svg",
-	"./13d.svg": "./src/icons/13d.svg",
-	"./13n.svg": "./src/icons/13n.svg",
-	"./50d.svg": "./src/icons/50d.svg",
-	"./50n.svg": "./src/icons/50n.svg",
-	"./raindrop.svg": "./src/icons/raindrop.svg"
+	"./01d.jpg": "./src/Backgrounds/01d.jpg",
+	"./01n.jpg": "./src/Backgrounds/01n.jpg",
+	"./02d.jpg": "./src/Backgrounds/02d.jpg",
+	"./02n.jpg": "./src/Backgrounds/02n.jpg",
+	"./03d.jpg": "./src/Backgrounds/03d.jpg",
+	"./03n.jpg": "./src/Backgrounds/03n.jpg",
+	"./04d.jpg": "./src/Backgrounds/04d.jpg",
+	"./04n.jpg": "./src/Backgrounds/04n.jpg",
+	"./09d.jpg": "./src/Backgrounds/09d.jpg",
+	"./09n.jpg": "./src/Backgrounds/09n.jpg",
+	"./10d.jpg": "./src/Backgrounds/10d.jpg",
+	"./10n.jpg": "./src/Backgrounds/10n.jpg",
+	"./11d.jpg": "./src/Backgrounds/11d.jpg",
+	"./11n.jpg": "./src/Backgrounds/11n.jpg",
+	"./13d.jpg": "./src/Backgrounds/13d.jpg",
+	"./13n.jpg": "./src/Backgrounds/13n.jpg",
+	"./50d.jpg": "./src/Backgrounds/50d.jpg",
+	"./50n.jpg": "./src/Backgrounds/50n.jpg"
 };
 
 
@@ -1297,13 +1477,287 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = "./src/icons sync recursive ^\\.\\/.*\\.svg$";
+webpackContext.id = "./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$";
 
 /***/ }),
 
-/***/ "./src/icons/01d.svg":
+/***/ "./src/Icons sync recursive ^\\.\\/.*\\.svg$":
+/*!***************************************!*\
+  !*** ./src/Icons/ sync ^\.\/.*\.svg$ ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./01d.svg": "./src/Icons/01d.svg",
+	"./01n.svg": "./src/Icons/01n.svg",
+	"./02d.svg": "./src/Icons/02d.svg",
+	"./02n.svg": "./src/Icons/02n.svg",
+	"./03d.svg": "./src/Icons/03d.svg",
+	"./03n.svg": "./src/Icons/03n.svg",
+	"./04d.svg": "./src/Icons/04d.svg",
+	"./04n.svg": "./src/Icons/04n.svg",
+	"./09d.svg": "./src/Icons/09d.svg",
+	"./09n.svg": "./src/Icons/09n.svg",
+	"./10d.svg": "./src/Icons/10d.svg",
+	"./10n.svg": "./src/Icons/10n.svg",
+	"./11d.svg": "./src/Icons/11d.svg",
+	"./11n.svg": "./src/Icons/11n.svg",
+	"./13d.svg": "./src/Icons/13d.svg",
+	"./13n.svg": "./src/Icons/13n.svg",
+	"./50d.svg": "./src/Icons/50d.svg",
+	"./50n.svg": "./src/Icons/50n.svg",
+	"./Humidity.svg": "./src/Icons/Humidity.svg",
+	"./Static Backups/01d.svg": "./src/Icons/Static Backups/01d.svg",
+	"./Static Backups/01n.svg": "./src/Icons/Static Backups/01n.svg",
+	"./Static Backups/02d.svg": "./src/Icons/Static Backups/02d.svg",
+	"./Static Backups/02n.svg": "./src/Icons/Static Backups/02n.svg",
+	"./Static Backups/03d.svg": "./src/Icons/Static Backups/03d.svg",
+	"./Static Backups/03n.svg": "./src/Icons/Static Backups/03n.svg",
+	"./Static Backups/04d.svg": "./src/Icons/Static Backups/04d.svg",
+	"./Static Backups/04n.svg": "./src/Icons/Static Backups/04n.svg",
+	"./Static Backups/09d.svg": "./src/Icons/Static Backups/09d.svg",
+	"./Static Backups/09n.svg": "./src/Icons/Static Backups/09n.svg",
+	"./Static Backups/10d.svg": "./src/Icons/Static Backups/10d.svg",
+	"./Static Backups/10n.svg": "./src/Icons/Static Backups/10n.svg",
+	"./Static Backups/11d.svg": "./src/Icons/Static Backups/11d.svg",
+	"./Static Backups/11n.svg": "./src/Icons/Static Backups/11n.svg",
+	"./Static Backups/13d.svg": "./src/Icons/Static Backups/13d.svg",
+	"./Static Backups/13n.svg": "./src/Icons/Static Backups/13n.svg",
+	"./Static Backups/50d.svg": "./src/Icons/Static Backups/50d.svg",
+	"./Static Backups/50n.svg": "./src/Icons/Static Backups/50n.svg",
+	"./Static Backups/arrow.svg": "./src/Icons/Static Backups/arrow.svg",
+	"./Static Backups/raindrop.svg": "./src/Icons/Static Backups/raindrop.svg",
+	"./Sunrise.svg": "./src/Icons/Sunrise.svg",
+	"./Sunset.svg": "./src/Icons/Sunset.svg",
+	"./UV Index.svg": "./src/Icons/UV Index.svg",
+	"./Wind.svg": "./src/Icons/Wind.svg",
+	"./arrow.svg": "./src/Icons/arrow.svg",
+	"./raindrop.svg": "./src/Icons/raindrop.svg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/Icons sync recursive ^\\.\\/.*\\.svg$";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/01d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/01d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/e11cdf2b492573f7c8a8.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/01n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/01n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/984e8cbc8482344f1252.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/02d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/02d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/b186c9fbad3275579f97.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/02n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/02n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/ac7a022dc46369fb3588.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/03d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/03d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/998997adc8f622956b7a.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/03n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/03n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/ac7a022dc46369fb3588.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/04d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/04d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/4cc1773388415f37b55a.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/04n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/04n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/680c8cfe772c13e935d2.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/09d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/09d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/c6c3bb78609b96601a59.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/09n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/09n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/c6c3bb78609b96601a59.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/10d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/10d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/c6c3bb78609b96601a59.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/10n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/10n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/c6c3bb78609b96601a59.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/11d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/11d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/19ff26bf8b2376533116.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/11n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/11n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/19ff26bf8b2376533116.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/13d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/13d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/f4b5ce05ad6d4a058d66.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/13n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/13n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/f4b5ce05ad6d4a058d66.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/50d.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/50d.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/e814e8ff8181a50073a5.jpg";
+
+/***/ }),
+
+/***/ "./src/Backgrounds/50n.jpg":
+/*!*********************************!*\
+  !*** ./src/Backgrounds/50n.jpg ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/a1b5d29b52965cc79b08.jpg";
+
+/***/ }),
+
+/***/ "./src/Icons/01d.svg":
 /*!***************************!*\
-  !*** ./src/icons/01d.svg ***!
+  !*** ./src/Icons/01d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1312,9 +1766,9 @@ module.exports = __webpack_require__.p + "Images/0c75f6c08e5684c26d05.svg";
 
 /***/ }),
 
-/***/ "./src/icons/01n.svg":
+/***/ "./src/Icons/01n.svg":
 /*!***************************!*\
-  !*** ./src/icons/01n.svg ***!
+  !*** ./src/Icons/01n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1323,9 +1777,9 @@ module.exports = __webpack_require__.p + "Images/2dabfd2a6790ec4380ec.svg";
 
 /***/ }),
 
-/***/ "./src/icons/02d.svg":
+/***/ "./src/Icons/02d.svg":
 /*!***************************!*\
-  !*** ./src/icons/02d.svg ***!
+  !*** ./src/Icons/02d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1334,9 +1788,9 @@ module.exports = __webpack_require__.p + "Images/eac95fa3a642a268b60a.svg";
 
 /***/ }),
 
-/***/ "./src/icons/02n.svg":
+/***/ "./src/Icons/02n.svg":
 /*!***************************!*\
-  !*** ./src/icons/02n.svg ***!
+  !*** ./src/Icons/02n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1345,9 +1799,9 @@ module.exports = __webpack_require__.p + "Images/fdaeeb46728d18646807.svg";
 
 /***/ }),
 
-/***/ "./src/icons/03d.svg":
+/***/ "./src/Icons/03d.svg":
 /*!***************************!*\
-  !*** ./src/icons/03d.svg ***!
+  !*** ./src/Icons/03d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1356,9 +1810,9 @@ module.exports = __webpack_require__.p + "Images/6f66956c31a6c57393df.svg";
 
 /***/ }),
 
-/***/ "./src/icons/03n.svg":
+/***/ "./src/Icons/03n.svg":
 /*!***************************!*\
-  !*** ./src/icons/03n.svg ***!
+  !*** ./src/Icons/03n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1367,9 +1821,9 @@ module.exports = __webpack_require__.p + "Images/6f66956c31a6c57393df.svg";
 
 /***/ }),
 
-/***/ "./src/icons/04d.svg":
+/***/ "./src/Icons/04d.svg":
 /*!***************************!*\
-  !*** ./src/icons/04d.svg ***!
+  !*** ./src/Icons/04d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1378,9 +1832,9 @@ module.exports = __webpack_require__.p + "Images/9237af3fb8cf0403c0ad.svg";
 
 /***/ }),
 
-/***/ "./src/icons/04n.svg":
+/***/ "./src/Icons/04n.svg":
 /*!***************************!*\
-  !*** ./src/icons/04n.svg ***!
+  !*** ./src/Icons/04n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1389,9 +1843,9 @@ module.exports = __webpack_require__.p + "Images/9237af3fb8cf0403c0ad.svg";
 
 /***/ }),
 
-/***/ "./src/icons/09d.svg":
+/***/ "./src/Icons/09d.svg":
 /*!***************************!*\
-  !*** ./src/icons/09d.svg ***!
+  !*** ./src/Icons/09d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1400,9 +1854,9 @@ module.exports = __webpack_require__.p + "Images/3f664059b4b583fb5619.svg";
 
 /***/ }),
 
-/***/ "./src/icons/09n.svg":
+/***/ "./src/Icons/09n.svg":
 /*!***************************!*\
-  !*** ./src/icons/09n.svg ***!
+  !*** ./src/Icons/09n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1411,9 +1865,9 @@ module.exports = __webpack_require__.p + "Images/3f664059b4b583fb5619.svg";
 
 /***/ }),
 
-/***/ "./src/icons/10d.svg":
+/***/ "./src/Icons/10d.svg":
 /*!***************************!*\
-  !*** ./src/icons/10d.svg ***!
+  !*** ./src/Icons/10d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1422,9 +1876,9 @@ module.exports = __webpack_require__.p + "Images/3b03853e69bd9ea2b1ca.svg";
 
 /***/ }),
 
-/***/ "./src/icons/10n.svg":
+/***/ "./src/Icons/10n.svg":
 /*!***************************!*\
-  !*** ./src/icons/10n.svg ***!
+  !*** ./src/Icons/10n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1433,9 +1887,9 @@ module.exports = __webpack_require__.p + "Images/97a3a94e7fe6d1f3d886.svg";
 
 /***/ }),
 
-/***/ "./src/icons/11d.svg":
+/***/ "./src/Icons/11d.svg":
 /*!***************************!*\
-  !*** ./src/icons/11d.svg ***!
+  !*** ./src/Icons/11d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1444,9 +1898,9 @@ module.exports = __webpack_require__.p + "Images/efdb5d3ba962ae2b233e.svg";
 
 /***/ }),
 
-/***/ "./src/icons/11n.svg":
+/***/ "./src/Icons/11n.svg":
 /*!***************************!*\
-  !*** ./src/icons/11n.svg ***!
+  !*** ./src/Icons/11n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1455,9 +1909,9 @@ module.exports = __webpack_require__.p + "Images/efdb5d3ba962ae2b233e.svg";
 
 /***/ }),
 
-/***/ "./src/icons/13d.svg":
+/***/ "./src/Icons/13d.svg":
 /*!***************************!*\
-  !*** ./src/icons/13d.svg ***!
+  !*** ./src/Icons/13d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1466,9 +1920,9 @@ module.exports = __webpack_require__.p + "Images/4adbfebb16e46d01aaa5.svg";
 
 /***/ }),
 
-/***/ "./src/icons/13n.svg":
+/***/ "./src/Icons/13n.svg":
 /*!***************************!*\
-  !*** ./src/icons/13n.svg ***!
+  !*** ./src/Icons/13n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1477,9 +1931,9 @@ module.exports = __webpack_require__.p + "Images/4adbfebb16e46d01aaa5.svg";
 
 /***/ }),
 
-/***/ "./src/icons/50d.svg":
+/***/ "./src/Icons/50d.svg":
 /*!***************************!*\
-  !*** ./src/icons/50d.svg ***!
+  !*** ./src/Icons/50d.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1488,9 +1942,9 @@ module.exports = __webpack_require__.p + "Images/1f6622bb84bb395bf9fa.svg";
 
 /***/ }),
 
-/***/ "./src/icons/50n.svg":
+/***/ "./src/Icons/50n.svg":
 /*!***************************!*\
-  !*** ./src/icons/50n.svg ***!
+  !*** ./src/Icons/50n.svg ***!
   \***************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -1499,14 +1953,300 @@ module.exports = __webpack_require__.p + "Images/1f6622bb84bb395bf9fa.svg";
 
 /***/ }),
 
-/***/ "./src/icons/raindrop.svg":
+/***/ "./src/Icons/Humidity.svg":
 /*!********************************!*\
-  !*** ./src/icons/raindrop.svg ***!
+  !*** ./src/Icons/Humidity.svg ***!
   \********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "Images/5bbd4940e222e25ce420.svg";
+module.exports = __webpack_require__.p + "Images/f6f97c5f6b692e20bbb1.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/01d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/01d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/b5b0c148a6b0f10ac458.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/01n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/01n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/58546ac8c1a36fb22614.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/02d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/02d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/a223dc71c73b753676c0.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/02n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/02n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/03d21947201668f2866e.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/03d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/03d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/0639345a8e0604eb15d1.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/03n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/03n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/0639345a8e0604eb15d1.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/04d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/04d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/80bdcc715a54760520b7.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/04n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/04n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/80bdcc715a54760520b7.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/09d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/09d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/5ff05f2711dc23587e35.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/09n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/09n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/5ff05f2711dc23587e35.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/10d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/10d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/6e70b74881307b806ccd.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/10n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/10n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/b6f5bbd51cae297592ef.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/11d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/11d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/bd8b574bc77fb7449178.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/11n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/11n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/bd8b574bc77fb7449178.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/13d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/13d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/132215cb1cd1e6781d72.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/13n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/13n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/132215cb1cd1e6781d72.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/50d.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/50d.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/b97ec1253e759f0f91f5.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/50n.svg":
+/*!******************************************!*\
+  !*** ./src/Icons/Static Backups/50n.svg ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/b97ec1253e759f0f91f5.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/arrow.svg":
+/*!********************************************!*\
+  !*** ./src/Icons/Static Backups/arrow.svg ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/f5557c01b464791b85fc.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static Backups/raindrop.svg":
+/*!***********************************************!*\
+  !*** ./src/Icons/Static Backups/raindrop.svg ***!
+  \***********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/f66d9e505e96917b2ace.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Sunrise.svg":
+/*!*******************************!*\
+  !*** ./src/Icons/Sunrise.svg ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/01d6b6d8789db87cd549.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Sunset.svg":
+/*!******************************!*\
+  !*** ./src/Icons/Sunset.svg ***!
+  \******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/bcdb97891346ba05949d.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/UV Index.svg":
+/*!********************************!*\
+  !*** ./src/Icons/UV Index.svg ***!
+  \********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/dbc422e2e8cb4315e241.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Wind.svg":
+/*!****************************!*\
+  !*** ./src/Icons/Wind.svg ***!
+  \****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/7666ea56edeecb3eff02.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/arrow.svg":
+/*!*****************************!*\
+  !*** ./src/Icons/arrow.svg ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/07d13a4c101c2d943745.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/raindrop.svg":
+/*!********************************!*\
+  !*** ./src/Icons/raindrop.svg ***!
+  \********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/f66d9e505e96917b2ace.svg";
 
 /***/ }),
 
@@ -1659,6 +2399,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _us_cities_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./us-cities.json */ "./src/us-cities.json");
 /* harmony import */ var _weatherDataTools__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./weatherDataTools */ "./src/weatherDataTools.js");
 /* harmony import */ var _mainTile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mainTile */ "./src/mainTile.js");
+/* harmony import */ var _dailyTile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dailyTile */ "./src/dailyTile.js");
+/* harmony import */ var _auxTile__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./auxTile */ "./src/auxTile.js");
 
 
 
@@ -1666,7 +2408,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-(0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_5__["default"])('Boone', 'NC', 'US').then(_mainTile__WEBPACK_IMPORTED_MODULE_6__["default"]); // const usCityIds = Array.from(usCities, (city) => city.id);
+
+
+(0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_5__["default"])('Hendersonville', 'NC', 'US').then(function (data) {
+  var background = __webpack_require__("./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$")("./".concat(data.current.iconCode, ".jpg"));
+
+  document.documentElement.style.backgroundImage = "url(".concat(background, ")");
+  (0,_mainTile__WEBPACK_IMPORTED_MODULE_6__["default"])(data);
+  (0,_dailyTile__WEBPACK_IMPORTED_MODULE_7__["default"])(data);
+  (0,_auxTile__WEBPACK_IMPORTED_MODULE_8__["default"])(data);
+}); // const usCityIds = Array.from(usCities, (city) => city.id);
 // const usStateNames = Object.values(usStates);
 // const usStateCodes = Object.keys(usStates);
 // const body = document.querySelector('body');
@@ -1711,16 +2462,8 @@ TO DO
 [ ] Make country dropdown box using countries.json
 [ ] Make state dropdown that only activates if USA is selected
 [ ] Make city text input
-[x] Implement 'One Call API' (harvest lat./long. values from other api call first!)
-[ ] Figure out how to display...
-    - current conditions (weather, temp, visibility, today's hi/lo, 'Feels like')
-    - hourly forecast (weather, precip chance, temp)
-    - 7-day forecast (day AND night weather, precip chance, hi/lo temp)
-    - UV index
-    - sunrise/sunset
-    - wind speed and direction
-    - humidity
 [ ] Add error handling for rejected calls and missing data fields
+[ ] Make clock update every minute, weather data every 15 minutes
 
 */
 })();
