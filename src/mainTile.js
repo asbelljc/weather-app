@@ -1,8 +1,8 @@
-function makeHeader(weatherData) {
+function makeLocale(weatherData) {
   const state = weatherData.state ? weatherData.state : weatherData.country;
 
-  const header = document.createElement('div');
-  header.className = 'header';
+  const locale = document.createElement('div');
+  locale.className = 'locale';
   const placeName = document.createElement('h2');
   placeName.className = 'place-name';
   placeName.textContent = `${weatherData.city}, ${state}`;
@@ -10,10 +10,10 @@ function makeHeader(weatherData) {
   dateAndTime.className = 'date-and-time';
   dateAndTime.textContent = weatherData.current.dateAndTime.fullDateAndTime;
 
-  header.appendChild(placeName);
-  header.appendChild(dateAndTime);
+  locale.appendChild(placeName);
+  locale.appendChild(dateAndTime);
 
-  return header;
+  return locale;
 }
 
 function makeCurrent(weatherData) {
@@ -80,11 +80,11 @@ function makeHourly(weatherData) {
 function makeMain(weatherData) {
   const main = document.createElement('div');
   main.className = 'tile';
-  const header = makeHeader(weatherData);
+  const locale = makeLocale(weatherData);
   const current = makeCurrent(weatherData);
   const hourly = makeHourly(weatherData);
 
-  [header, current, hourly].forEach((elem) => main.appendChild(elem));
+  [locale, current, hourly].forEach((elem) => main.appendChild(elem));
 
   return main;
 }
@@ -92,7 +92,7 @@ function makeMain(weatherData) {
 function loadMain(weatherData) {
   const main = makeMain(weatherData);
 
-  document.body.appendChild(main);
+  document.getElementById('root').appendChild(main);
 }
 
 export default loadMain;

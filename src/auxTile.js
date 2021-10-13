@@ -64,7 +64,7 @@ function makeAuxiliary(weatherData) {
 function loadAuxiliary(weatherData) {
   const auxiliary = makeAuxiliary(weatherData);
 
-  document.body.appendChild(auxiliary);
+  document.getElementById('root').appendChild(auxiliary);
 }
 
 export default loadAuxiliary;

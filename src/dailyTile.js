@@ -50,7 +50,7 @@ function makeDaily(weatherData) {
 function loadDaily(weatherData) {
   const daily = makeDaily(weatherData);
 
-  document.body.appendChild(daily);
+  document.getElementById('root').appendChild(daily);
 }
 
 export default loadDaily;

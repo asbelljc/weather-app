@@ -17,9 +17,9 @@ function makeUnitsPanel() {
   return unitsPanel;
 }
 
-function makeNav() {
-  const nav = document.createElement('div');
-  nav.className = 'nav';
+function makeHeader() {
+  const header = document.createElement('div');
+  header.className = 'header';
   const units = makeUnitsPanel();
   const title = document.createElement('h1');
   title.className = 'title';
@@ -27,15 +27,15 @@ function makeNav() {
   const location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location'[(units, title, location)].forEach(
-    (elem) => nav.appendChild(elem)
+    (elem) => header.appendChild(elem)
   );
 
-  return nav;
+  return header;
 }
 
-function loadNav() {
-  const nav = makeNav();
-  document.body.appendChild(nav);
+function loadHeader() {
+  const header = makeHeader();
+  document.getElementById('root').appendChild(header);
 }
 
-export default loadNav;
+export default loadHeader;
