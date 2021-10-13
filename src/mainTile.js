@@ -1,3 +1,32 @@
+function makeUnitButtons() {
+  const unitBtns = document.createElement('div');
+  unitBtns.className = 'unit-btns';
+  const standard = document.createElement('button');
+  standard.className = 'standard-btn';
+  standard.type = 'button';
+  standard.textContent = 'Standard';
+  const metric = document.createElement('button');
+  metric.className = 'metric-btn';
+  metric.type = 'button';
+  metric.textContent = 'Metric';
+
+  [standard, metric].forEach((elem) => unitBtns.appendChild(elem));
+
+  return unitBtns;
+}
+
+function makeControlPanel() {
+  const controlPanel = document.createElement('div');
+  controlPanel.className = 'control-panel';
+  const units = makeUnitButtons();
+  const location = document.createElement('button');
+  location.className = 'change-location';
+  location.textContent = 'Change location';
+  [units, location].forEach((elem) => controlPanel.appendChild(elem));
+
+  return controlPanel;
+}
+
 function makeLocale(weatherData) {
   const state = weatherData.state ? weatherData.state : weatherData.country;
 
@@ -80,11 +109,12 @@ function makeHourly(weatherData) {
 function makeMain(weatherData) {
   const main = document.createElement('div');
   main.className = 'tile';
+  const controls = makeControlPanel();
   const locale = makeLocale(weatherData);
   const current = makeCurrent(weatherData);
   const hourly = makeHourly(weatherData);
 
-  [locale, current, hourly].forEach((elem) => main.appendChild(elem));
+  [controls, locale, current, hourly].forEach((elem) => main.appendChild(elem));
 
   return main;
 }

@@ -1,9 +1,7 @@
 import './style.scss';
 import 'regenerator-runtime/runtime';
-import countries from './countries.json';
-import usStates from './us-states.json';
-import usCities from './us-cities.json';
 import getWeatherData from './weatherDataTools';
+import loadModal from './modal';
 import loadMain from './mainTile';
 import loadDaily from './dailyTile';
 import loadAuxiliary from './auxTile';
@@ -15,6 +13,8 @@ getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
   loadDaily(data);
   loadAuxiliary(data);
 });
+
+// linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 50%),
 
 // const usCityIds = Array.from(usCities, (city) => city.id);
 // const usStateNames = Object.values(usStates);
