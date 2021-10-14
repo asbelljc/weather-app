@@ -20,9 +20,33 @@ const refreshClock = (() => {
       ).fullDateAndTime;
     }
   }, 30000);
-
-  return { interval }; // might need this to clear interval
 })();
+
+function clearTiles() {
+  const root = document.getElementById('root');
+  while (root.firstChild) root.removeChild(root.firstChild);
+}
+
+function handleUnits() {
+  const unitBtns = document.querySelector('.unit-btns');
+  unitBtns.addEventListener('click', (e) => {
+    if (e.target.className === 'active') return;
+    if (e.target.className === 'standard-btn') {
+      clearTiles();
+      loadMain(currentData);
+      loadDaily(currentData);
+      loadAuxiliary(currentData);
+      handleUnits(); // ***
+    }
+    if (e.target.className === 'metric-btn') {
+      clearTiles();
+      loadMain(currentData, true);
+      loadDaily(currentData, true);
+      loadAuxiliary(currentData, true);
+      handleUnits(); // *** recursion needed because click listeners get removed on unit-change
+    }
+  });
+}
 
 getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
@@ -31,6 +55,7 @@ getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
   loadDaily(data);
   loadAuxiliary(data);
   currentData = data;
+  handleUnits();
 });
 
 // linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 50%),
