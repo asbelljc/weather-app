@@ -1,24 +1,30 @@
-function makeUnitButtons() {
+function makeUnitButtons(metric) {
   const unitBtns = document.createElement('div');
   unitBtns.className = 'unit-btns';
-  const standard = document.createElement('button');
-  standard.className = 'standard-btn';
-  standard.type = 'button';
-  standard.textContent = 'Standard';
-  const metric = document.createElement('button');
-  metric.className = 'metric-btn';
-  metric.type = 'button';
-  metric.textContent = 'Metric';
+  const standardBtn = document.createElement('button');
+  standardBtn.className = 'standard-btn';
+  standardBtn.type = 'button';
+  standardBtn.textContent = 'Standard';
+  const metricBtn = document.createElement('button');
+  metricBtn.className = 'metric-btn';
+  metricBtn.type = 'button';
+  metricBtn.textContent = 'Metric';
 
-  [standard, metric].forEach((elem) => unitBtns.appendChild(elem));
+  if (!!metric) {
+    metricBtn.classList.add('in-use');
+  } else {
+    standardBtn.classList.add('in-use');
+  }
+
+  [standardBtn, metricBtn].forEach((elem) => unitBtns.appendChild(elem));
 
   return unitBtns;
 }
 
-function makeControlPanel() {
+function makeControlPanel(metric) {
   const controlPanel = document.createElement('div');
   controlPanel.className = 'control-panel';
-  const units = makeUnitButtons();
+  const units = makeUnitButtons(metric);
   const location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location';
@@ -118,7 +124,7 @@ function makeHourly(weatherData, metric) {
 function makeMain(weatherData, metric) {
   const main = document.createElement('div');
   main.className = 'tile';
-  const controls = makeControlPanel();
+  const controls = makeControlPanel(metric);
   const locale = makeLocale(weatherData);
   const current = makeCurrent(weatherData, metric);
   const hourly = makeHourly(weatherData, metric);
