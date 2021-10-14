@@ -7,7 +7,7 @@ import loadDaily from './dailyTile';
 import loadAuxiliary from './auxTile';
 import getLocalDateAndTime from './timeTools';
 
-let currentData;
+let currentData; // for caching current locale data
 
 const refreshClock = (() => {
   const interval = setInterval(() => {
@@ -29,9 +29,10 @@ function clearTiles() {
 
 function handleUnits() {
   const unitBtns = document.querySelector('.unit-btns');
+
   unitBtns.addEventListener('click', (e) => {
     if (e.target.classList.contains('in-use')) return;
-    console.log(e.target);
+
     const metric = e.target.className === 'metric-btn' ? true : false;
 
     clearTiles();
@@ -42,13 +43,15 @@ function handleUnits() {
   });
 }
 
-getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
+getWeatherData('Baghdad', '', 'IQ').then((data) => {
+  currentData = data; // cache current locale data
+
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
   document.documentElement.style.backgroundImage = `url(${background})`;
+
   loadMain(data);
   loadDaily(data);
   loadAuxiliary(data);
-  currentData = data;
   handleUnits();
 });
 

@@ -46,6 +46,8 @@ async function getComplexDataSource(city, state, country) {
     `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232`
   );
 
+  console.log(response);
+
   const complexDataSource = await response.json();
 
   // This place data fills in gaps in the API response and allows user to

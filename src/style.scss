@@ -112,15 +112,16 @@ body {
       color: white;
     }
 
-    &:active:not(.in-use) {
-      color: $secondary-color;
-    }
     // prevent sticky hover on mobile
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(.in-use) {
         cursor: pointer;
         color: rgb(205, 205, 205);
       }
+    }
+
+    &:active:not(.in-use) {
+      color: $secondary-color;
     }
   }
 }
