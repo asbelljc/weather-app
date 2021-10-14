@@ -39,6 +39,7 @@ function makeDaily(weatherData) {
   const dailyInfo = document.createElement('div');
   dailyInfo.className = 'daily';
   const days = weatherData.daily.map(makeDay);
+  days[0].querySelector('.name').textContent = 'Today';
 
   days.forEach((day) => dailyInfo.appendChild(day));
 

@@ -21,7 +21,7 @@ const refreshClock = (() => {
     }
   }, 30000);
 
-  return { interval }; // need this to clear interval
+  return { interval }; // might need this to clear interval
 })();
 
 getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
