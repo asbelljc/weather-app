@@ -77,6 +77,7 @@ function getLocalDateAndTime(utcUnixTime, timezoneOffset) {
     fullDate,
     fullTime,
     fullDateAndTime,
+    timezoneOffset, // needed for updating clock
   };
 }
 

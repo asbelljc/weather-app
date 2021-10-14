@@ -5,6 +5,24 @@ import loadModal from './modal';
 import loadMain from './mainTile';
 import loadDaily from './dailyTile';
 import loadAuxiliary from './auxTile';
+import getLocalDateAndTime from './timeTools';
+
+let currentData;
+
+const refreshClock = (() => {
+  const interval = setInterval(() => {
+    if (!!currentData) {
+      const currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
+      const dateAndTime = document.getElementsByClassName('date-and-time')[0];
+      dateAndTime.textContent = getLocalDateAndTime(
+        currentUnixTime,
+        currentData.current.dateAndTime.timezoneOffset
+      ).fullDateAndTime;
+    }
+  }, 30000);
+
+  return { interval }; // need this to clear interval
+})();
 
 getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
@@ -12,6 +30,7 @@ getWeatherData('Hendersonville', 'NC', 'US').then((data) => {
   loadMain(data);
   loadDaily(data);
   loadAuxiliary(data);
+  currentData = data;
 });
 
 // linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 50%),

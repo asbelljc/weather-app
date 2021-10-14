@@ -125,11 +125,20 @@ body {
     color: $secondary-color;
     background: transparent;
     border: none;
+
+    &:hover {
+      cursor: pointer;
+      color: rgb(205, 205, 205);
+    }
+
+    &:active {
+      color: $secondary-color;
+    }
   }
 }
 
-.standard-btn.standard-btn {
-  border-right: 1px solid $secondary-color;
+.standard-btn {
+  border-right: 1px solid $secondary-color !important;
 }
 
 .tile {
@@ -139,6 +148,7 @@ body {
   background: $tile-background;
   border-radius: 10px;
   backdrop-filter: blur(10px);
+
   &:nth-child(1) {
     grid-area: a;
   }
