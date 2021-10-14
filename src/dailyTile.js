@@ -17,7 +17,7 @@ function makeWeatherPanel(dayData) {
   return weatherPanel;
 }
 
-function makeDay(dayData) {
+function makeDay(dayData, metric) {
   const day = document.createElement('div');
   day.className = 'day';
   const name = document.createElement('div');
@@ -26,19 +26,21 @@ function makeDay(dayData) {
   const weather = makeWeatherPanel(dayData);
   const hiLo = document.createElement('div');
   hiLo.className = 'hi-lo';
-  hiLo.innerText = `${dayData.highTemp.f}°/${dayData.lowTemp.f}°`;
+  hiLo.innerText = !!metric
+    ? `${dayData.highTemp.c}°/${dayData.lowTemp.c}°`
+    : `${dayData.highTemp.f}°/${dayData.lowTemp.f}°`;
 
   [name, weather, hiLo].forEach((elem) => day.appendChild(elem));
 
   return day;
 }
 
-function makeDaily(weatherData) {
+function makeDaily(weatherData, metric) {
   const daily = document.createElement('div');
   daily.className = 'tile';
   const dailyInfo = document.createElement('div');
   dailyInfo.className = 'daily';
-  const days = weatherData.daily.map(makeDay);
+  const days = weatherData.daily.map((dayData) => makeDay(dayData, metric));
   days[0].querySelector('.name').textContent = 'Today';
 
   days.forEach((day) => dailyInfo.appendChild(day));
@@ -48,8 +50,8 @@ function makeDaily(weatherData) {
   return daily;
 }
 
-function loadDaily(weatherData) {
-  const daily = makeDaily(weatherData);
+function loadDaily(weatherData, metric) {
+  const daily = makeDaily(weatherData, metric);
 
   document.getElementById('root').appendChild(daily);
 }

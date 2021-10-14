@@ -13,7 +13,7 @@ function makePanel(name, readoutDiv) {
   return panel;
 }
 
-function makeAuxiliary(weatherData) {
+function makeAuxiliary(weatherData, metric) {
   const auxiliary = document.createElement('div');
   auxiliary.className = 'tile';
   const auxInfo = document.createElement('div');
@@ -37,7 +37,9 @@ function makeAuxiliary(weatherData) {
   direction.src = require('./Icons/arrow.svg');
   direction.style.transform = `rotate(${weatherData.current.windDirection}deg)`;
   const speed = document.createElement('div');
-  speed.textContent = weatherData.current.windSpeed.mph;
+  speed.textContent = !!metric
+    ? weatherData.current.windSpeed.kmh
+    : weatherData.current.windSpeed.mph;
   [direction, speed].forEach((elem) => windReadout.appendChild(elem));
 
   const humidityReadout = document.createElement('div');
@@ -61,8 +63,8 @@ function makeAuxiliary(weatherData) {
   return auxiliary;
 }
 
-function loadAuxiliary(weatherData) {
-  const auxiliary = makeAuxiliary(weatherData);
+function loadAuxiliary(weatherData, metric) {
+  const auxiliary = makeAuxiliary(weatherData, metric);
 
   document.getElementById('root').appendChild(auxiliary);
 }

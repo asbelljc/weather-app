@@ -45,7 +45,7 @@ function makeLocale(weatherData) {
   return locale;
 }
 
-function makeCurrent(weatherData) {
+function makeCurrent(weatherData, metric) {
   const current = document.createElement('div');
   current.className = 'current';
   const icon = document.createElement('img');
@@ -55,10 +55,15 @@ function makeCurrent(weatherData) {
   info.className = 'info';
   const temperature = document.createElement('div');
   temperature.className = 'temperature';
-  temperature.textContent = `${weatherData.current.temperature.f}°`;
+  temperature.textContent = !!metric
+    ? `${weatherData.current.temperature.c}°`
+    : `${weatherData.current.temperature.f}°`;
   const hiLoFeel = document.createElement('div');
   hiLoFeel.className = 'hi-lo-feel';
-  hiLoFeel.innerText = `${weatherData.daily[0].highTemp.f}° / ${weatherData.daily[0].lowTemp.f}°
+  hiLoFeel.innerText = !!metric
+    ? `${weatherData.daily[0].highTemp.c}° / ${weatherData.daily[0].lowTemp.c}°
+    Feels like ${weatherData.current.feelsLike.c}°`
+    : `${weatherData.daily[0].highTemp.f}° / ${weatherData.daily[0].lowTemp.f}°
     Feels like ${weatherData.current.feelsLike.f}°`;
 
   info.appendChild(temperature);
@@ -69,7 +74,7 @@ function makeCurrent(weatherData) {
   return current;
 }
 
-function makeHour(hourData) {
+function makeHour(hourData, metric) {
   const tile = document.createElement('div');
   tile.className = 'hour';
   const time = document.createElement('div');
@@ -80,7 +85,9 @@ function makeHour(hourData) {
   icon.src = require(`./Icons/${hourData.iconCode}.svg`);
   const temperature = document.createElement('div');
   temperature.className = 'temperature';
-  temperature.textContent = `${hourData.temperature.f}°`;
+  temperature.textContent = !!metric
+    ? `${hourData.temperature.c}°`
+    : `${hourData.temperature.f}°`;
   const precipitation = document.createElement('div');
   precipitation.className = 'precipitation';
   const raindrop = document.createElement('img');
@@ -96,31 +103,33 @@ function makeHour(hourData) {
   return tile;
 }
 
-function makeHourly(weatherData) {
+function makeHourly(weatherData, metric) {
   const hourly = document.createElement('div');
   hourly.className = 'hourly';
-  const hours = weatherData.hourly.map(makeHour);
+  const hours = weatherData.hourly.map((hourData) =>
+    makeHour(hourData, metric)
+  );
 
   hours.forEach((hour) => hourly.appendChild(hour));
 
   return hourly;
 }
 
-function makeMain(weatherData) {
+function makeMain(weatherData, metric) {
   const main = document.createElement('div');
   main.className = 'tile';
   const controls = makeControlPanel();
   const locale = makeLocale(weatherData);
-  const current = makeCurrent(weatherData);
-  const hourly = makeHourly(weatherData);
+  const current = makeCurrent(weatherData, metric);
+  const hourly = makeHourly(weatherData, metric);
 
   [controls, locale, current, hourly].forEach((elem) => main.appendChild(elem));
 
   return main;
 }
 
-function loadMain(weatherData) {
-  const main = makeMain(weatherData);
+function loadMain(weatherData, metric) {
+  const main = makeMain(weatherData, metric);
 
   document.getElementById('root').appendChild(main);
 }
