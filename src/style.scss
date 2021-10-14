@@ -48,7 +48,6 @@
     /* Safari, Android, iOS */
       url('./Fonts/ubuntu-mono-v10-latin-regular.svg#UbuntuMono') format('svg'); /* Legacy iOS */
 }
-/* ubuntu-mono-700 - latin */
 
 $tile-padding: clamp(15px, 4.4%, 30px);
 $tile-background: rgba(0, 0, 0, 0.6);
@@ -116,7 +115,7 @@ body {
     &:active:not(.in-use) {
       color: $secondary-color;
     }
-
+    // prevent sticky hover on mobile
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(.in-use) {
         cursor: pointer;
@@ -124,6 +123,10 @@ body {
       }
     }
   }
+}
+
+.unit-btns {
+  display: flex;
 }
 
 .standard-btn {

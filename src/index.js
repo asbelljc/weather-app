@@ -30,21 +30,15 @@ function clearTiles() {
 function handleUnits() {
   const unitBtns = document.querySelector('.unit-btns');
   unitBtns.addEventListener('click', (e) => {
-    if (e.target.className === 'active') return;
-    if (e.target.className === 'standard-btn') {
-      clearTiles();
-      loadMain(currentData);
-      loadDaily(currentData);
-      loadAuxiliary(currentData);
-      handleUnits(); // ***
-    }
-    if (e.target.className === 'metric-btn') {
-      clearTiles();
-      loadMain(currentData, true);
-      loadDaily(currentData, true);
-      loadAuxiliary(currentData, true);
-      handleUnits(); // *** recursion needed because click listeners get removed on unit-change
-    }
+    if (e.target.classList.contains('in-use')) return;
+    console.log(e.target);
+    const metric = e.target.className === 'metric-btn' ? true : false;
+
+    clearTiles();
+    loadMain(currentData, metric);
+    loadDaily(currentData, metric);
+    loadAuxiliary(currentData, metric);
+    handleUnits(); // *** recursion needed because click listeners get removed on unit-change
   });
 }
 
