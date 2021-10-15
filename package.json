@@ -39,7 +39,6 @@
     "webpack-dev-server": "^4.2.1"
   },
   "dependencies": {
-    "core-js": "^3.18.0",
-    "styleselect": "^1.0.3"
+    "core-js": "^3.18.0"
   }
 }

@@ -43,7 +43,7 @@ function handleUnits() {
   });
 }
 
-getWeatherData('Baghdad', '', 'IQ').then((data) => {
+getWeatherData('Colorado Springs', 'CO', 'US').then((data) => {
   currentData = data; // cache current locale data
 
   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
@@ -52,6 +52,7 @@ getWeatherData('Baghdad', '', 'IQ').then((data) => {
   loadMain(data);
   loadDaily(data);
   loadAuxiliary(data);
+  loadModal();
   handleUnits();
 });
 

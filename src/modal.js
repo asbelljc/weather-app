@@ -18,10 +18,12 @@ function makeCityInput() {
 function makeStateInput() {
   const stateInput = document.createElement('select');
   stateInput.className = 'state-input';
+
   const stateDefault = document.createElement('option');
   stateDefault.textContent = 'State (US only)';
   stateDefault.value = '';
   stateInput.appendChild(stateDefault);
+
   usStateNames.forEach((state) => {
     const option = document.createElement('option');
     option.textContent = state;
@@ -35,10 +37,12 @@ function makeStateInput() {
 function makeCountryInput() {
   const countryInput = document.createElement('select');
   countryInput.className = 'country-input';
+
   const countryDefault = document.createElement('option');
   countryDefault.textContent = 'Country';
   countryDefault.value = '';
   countryInput.appendChild(countryDefault);
+
   countryNames.forEach((country) => {
     const option = document.createElement('option');
     option.textContent = country;
@@ -54,13 +58,32 @@ function makeModal() {
   modal.className = 'modal';
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
-  const cityInput = makeCityInput();
-  const stateInput = makeStateInput();
-  const countryInput = makeCountryInput();
 
-  [cityInput, stateInput, countryInput].forEach((input) =>
-    modalContent.appendChild(input)
-  );
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.type = 'button';
+  const cross = document.createElement('img');
+  cross.src = require('./Icons/cross.svg');
+
+  const inputs = document.createElement('div');
+  inputs.className = 'inputs';
+  const cityInput = makeCityInput();
+  const countryInput = makeCountryInput();
+  const stateInput = makeStateInput();
+  [cityInput, countryInput, stateInput].forEach((input) => {
+    inputs.appendChild(input);
+  });
+
+  const searchBtn = document.createElement('button');
+  searchBtn.className = 'search-btn';
+  searchBtn.type = 'button';
+  searchBtn.textContent = 'Search';
+
+  closeBtn.appendChild(cross);
+
+  [closeBtn, inputs, searchBtn].forEach((elem) => {
+    modalContent.appendChild(elem);
+  });
 
   modal.appendChild(modalContent);
 
