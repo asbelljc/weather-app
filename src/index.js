@@ -40,8 +40,10 @@ function addLocationHandler() {
 async function showWeather(city, state, country) {
   currentData = await getWeatherData(city, state, country);
 
-  const background = require(`./Backgrounds/${currentData.current.iconCode}.jpg`);
-  document.documentElement.style.backgroundImage = `url(${background})`;
+  const backgroundImg = require(`./Backgrounds/${currentData.current.iconCode}.jpg`);
+  document.querySelector(
+    '#background'
+  ).style.backgroundImage = `url(${backgroundImg})`;
 
   clearTiles();
   loadMain(currentData);
