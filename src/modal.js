@@ -3,15 +3,14 @@ import countries from './countries.json';
 
 const usStateNames = Object.values(usStates);
 const usStateCodes = Object.keys(usStates);
-const countryNames = Object.values(countries);
+const countryNames = Object.values(countries).sort((a, b) => (a < b ? -1 : 1));
 const countryCodes = Object.keys(countries);
 
 function makeCityInput() {
   const cityInput = document.createElement('input');
   cityInput.className = 'city-input';
   cityInput.type = 'text';
-  cityInput.placeholder = 'Please enter your city';
-  cityInput.required = true;
+  cityInput.placeholder = 'City';
 
   return cityInput;
 }
@@ -22,7 +21,7 @@ function makeStateInput() {
   stateInput.disabled = true;
 
   const stateDefault = document.createElement('option');
-  stateDefault.textContent = 'State (US only)';
+  stateDefault.textContent = 'State or Territory (US only)';
   stateDefault.value = '';
   stateInput.appendChild(stateDefault);
 
@@ -39,9 +38,8 @@ function makeStateInput() {
 function makeCountryInput() {
   const countryInput = document.createElement('select');
   countryInput.className = 'country-input';
-  countryInput.required = true;
   countryInput.oninput = () => {
-    if ((countryInput.value = 'US')) {
+    if (countryInput.value === 'US') {
       document.querySelector('.state-input').disabled = false;
     }
   };

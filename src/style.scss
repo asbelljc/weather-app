@@ -148,6 +148,19 @@ body {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
   transform: translateY(-200%);
   transition: transform 400ms;
+
+  &::before {
+    position: absolute;
+    top: 12px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: max-content;
+    font-size: 14px;
+    color: rgb(220, 0, 0);
+    text-align: center;
+    content: '';
+  }
 }
 
 .inputs {
@@ -155,6 +168,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.city-input,
+.country-input,
+.state-input {
+  font-family: 'Dosis';
 }
 
 .close-btn {
