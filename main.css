@@ -1,34 +1,24 @@
 /*!*********************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./src/style.scss ***!
   \*********************************************************************************************************/
-/* dosis-200 - latin */
-@font-face {
-  font-family: "Dosis";
-  font-style: normal;
-  font-weight: 200;
-  src: url(Fonts/9904737fabdfa300c970.eot);
-  /* IE9 Compat Modes */
-  src: local(""), url(Fonts/9904737fabdfa300c970.eot?#iefix) format("embedded-opentype"), url(Fonts/e59f22bea2f499ad47fe.woff2) format("woff2"), url(Fonts/87f9c40c0b6522e3a872.woff) format("woff"), url(Fonts/1b75787be4e515d27e32.ttf) format("truetype"), url(Images/33e631f28bdf21d412d5.svg#Dosis) format("svg");
-  /* Legacy iOS */
-}
-/* dosis-500 - latin */
+/* dosis-500 - vietnamese_latin-ext_latin */
 @font-face {
   font-family: "Dosis";
   font-style: normal;
   font-weight: 500;
-  src: url(Fonts/58ff4a66ba210ef04011.eot);
+  src: url(Fonts/c8183f5c9a43f5f66fae.eot);
   /* IE9 Compat Modes */
-  src: local(""), url(Fonts/58ff4a66ba210ef04011.eot?#iefix) format("embedded-opentype"), url(Fonts/c9bfe0879fdca6f684f1.woff2) format("woff2"), url(Fonts/24c617f0275a537bbc82.woff) format("woff"), url(Fonts/f53e005f5b47b31a08aa.ttf) format("truetype"), url(Images/4cd9e7c2f3a2192aa06e.svg#Dosis) format("svg");
+  src: local(""), url(Fonts/c8183f5c9a43f5f66fae.eot?#iefix) format("embedded-opentype"), url(Fonts/3ead82765cfb2004fb38.woff2) format("woff2"), url(Fonts/1477be5ddefee3998a9a.woff) format("woff"), url(Fonts/cc24580c997743b06e9e.ttf) format("truetype"), url(Images/7a507fe6803b4524b4bf.svg#Dosis) format("svg");
   /* Legacy iOS */
 }
-/* dosis-800 - latin */
+/* dosis-800 - vietnamese_latin-ext_latin */
 @font-face {
   font-family: "Dosis";
   font-style: normal;
   font-weight: 800;
-  src: url(Fonts/398ba35886a8860c40aa.eot);
+  src: url(Fonts/fa66925d37660639bdc2.eot);
   /* IE9 Compat Modes */
-  src: local(""), url(Fonts/398ba35886a8860c40aa.eot?#iefix) format("embedded-opentype"), url(Fonts/49532ee447395a63aa1b.woff2) format("woff2"), url(Fonts/abbce9fbc559e0667ae2.woff) format("woff"), url(Fonts/d38320b5cde39666ed4b.ttf) format("truetype"), url(Images/52970973365884b51d90.svg#Dosis) format("svg");
+  src: local(""), url(Fonts/fa66925d37660639bdc2.eot?#iefix) format("embedded-opentype"), url(Fonts/d8616e731109f6faa77d.woff2) format("woff2"), url(Fonts/9d697a0087c153f6a11c.woff) format("woff"), url(Fonts/fe92abce1cc3db5f27fe.ttf) format("truetype"), url(Images/aeaf4ff484f63bbfbab9.svg#Dosis) format("svg");
   /* Legacy iOS */
 }
 /* ubuntu-mono-regular - latin */
@@ -41,19 +31,11 @@
   src: local(""), url(Fonts/e6dab3431cff25c88992.eot?#iefix) format("embedded-opentype"), url(Fonts/fc77a86efb8c0ff2b73e.woff2) format("woff2"), url(Fonts/2f1e7025def086a5cb35.woff) format("woff"), url(Fonts/d10d8589fdd0d80d2529.ttf) format("truetype"), url(Images/acd71f99504b60e0d185.svg#UbuntuMono) format("svg");
   /* Legacy iOS */
 }
-/* ubuntu-mono-700 - latin */
 html {
   font-family: "Dosis";
   color: white;
   width: 100%;
   height: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
 }
 
 body {
@@ -61,6 +43,20 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+body.locked {
+  overflow: hidden;
+}
+
+#background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-image: url(Images/b186c9fbad3275579f97.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #root {
@@ -75,6 +71,141 @@ body {
   #root {
     grid-template: "a a" auto "b c" auto/1fr 1fr;
   }
+}
+
+.modal {
+  opacity: 0;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  transition: opacity 400ms;
+}
+.modal.open {
+  opacity: 1;
+}
+.modal.open .modal-content {
+  transform: translateY(0);
+}
+
+.modal-content {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px auto;
+  width: min(100% - 20px, 500px);
+  border-radius: 10px;
+  padding: 40px 40px 80px 40px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  transform: translateY(-200%);
+  transition: transform 400ms;
+}
+.modal-content::before {
+  position: absolute;
+  top: 12px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: max-content;
+  font-size: 14px;
+  color: #dc0000;
+  text-align: center;
+  content: "";
+}
+
+.inputs {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.city-input,
+.country-input,
+.state-input {
+  font-family: "Dosis";
+}
+
+.close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+.close-btn:hover {
+  cursor: pointer;
+}
+.close-btn img {
+  display: block;
+}
+
+.search-btn {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  border-radius: 5px;
+  padding: 6px 30px;
+  color: #373737;
+  font-family: "Dosis";
+  font-size: 14px;
+}
+.search-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+.search-btn:active {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.control-panel {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+.control-panel button {
+  font-family: "Dosis";
+  font-size: 12px;
+  color: #a0a0a0;
+  background: transparent;
+  border: none;
+}
+.control-panel button.in-use {
+  color: white;
+}
+@media (hover: hover) and (pointer: fine) {
+  .control-panel button:hover:not(.in-use) {
+    cursor: pointer;
+    color: #cdcdcd;
+  }
+}
+.control-panel button:active:not(.in-use) {
+  color: #a0a0a0;
+}
+
+.unit-btns {
+  display: flex;
+}
+
+.standard-btn {
+  border-right: 1px solid #a0a0a0 !important;
 }
 
 .tile {
