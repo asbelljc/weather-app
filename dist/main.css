@@ -164,10 +164,9 @@ body.locked {
   background: rgba(255, 255, 255, 0.4);
   border: none;
   border-radius: 5px;
-  padding: 6px 30px;
   color: #373737;
   font-family: "Dosis";
-  font-size: 14px;
+  font-size: 16px;
 }
 .search-btn:hover {
   background: rgba(255, 255, 255, 0.5);
