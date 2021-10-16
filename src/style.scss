@@ -170,7 +170,7 @@ body {
     font-size: 14px;
     color: rgb(220, 0, 0);
     text-align: center;
-    content: '';
+    content: attr(error);
   }
 }
 
