@@ -47,7 +47,7 @@ function makePanel(name, readoutDiv) {
   return panel;
 }
 
-function makeAuxiliary(weatherData) {
+function makeAuxiliary(weatherData, metric) {
   var auxiliary = document.createElement('div');
   auxiliary.className = 'tile';
   var auxInfo = document.createElement('div');
@@ -67,7 +67,7 @@ function makeAuxiliary(weatherData) {
   direction.src = __webpack_require__(/*! ./Icons/arrow.svg */ "./src/Icons/arrow.svg");
   direction.style.transform = "rotate(".concat(weatherData.current.windDirection, "deg)");
   var speed = document.createElement('div');
-  speed.textContent = weatherData.current.windSpeed.mph;
+  speed.textContent = !!metric ? weatherData.current.windSpeed.kmh : weatherData.current.windSpeed.mph;
   [direction, speed].forEach(function (elem) {
     return windReadout.appendChild(elem);
   });
@@ -92,8 +92,8 @@ function makeAuxiliary(weatherData) {
   return auxiliary;
 }
 
-function loadAuxiliary(weatherData) {
-  var auxiliary = makeAuxiliary(weatherData);
+function loadAuxiliary(weatherData, metric) {
+  var auxiliary = makeAuxiliary(weatherData, metric);
   document.getElementById('root').appendChild(auxiliary);
 }
 
@@ -133,7 +133,7 @@ function makeWeatherPanel(dayData) {
   return weatherPanel;
 }
 
-function makeDay(dayData) {
+function makeDay(dayData, metric) {
   var day = document.createElement('div');
   day.className = 'day';
   var name = document.createElement('div');
@@ -142,19 +142,22 @@ function makeDay(dayData) {
   var weather = makeWeatherPanel(dayData);
   var hiLo = document.createElement('div');
   hiLo.className = 'hi-lo';
-  hiLo.innerText = "".concat(dayData.highTemp.f, "\xB0/").concat(dayData.lowTemp.f, "\xB0");
+  hiLo.innerText = !!metric ? "".concat(dayData.highTemp.c, "\xB0/").concat(dayData.lowTemp.c, "\xB0") : "".concat(dayData.highTemp.f, "\xB0/").concat(dayData.lowTemp.f, "\xB0");
   [name, weather, hiLo].forEach(function (elem) {
     return day.appendChild(elem);
   });
   return day;
 }
 
-function makeDaily(weatherData) {
+function makeDaily(weatherData, metric) {
   var daily = document.createElement('div');
   daily.className = 'tile';
   var dailyInfo = document.createElement('div');
   dailyInfo.className = 'daily';
-  var days = weatherData.daily.map(makeDay);
+  var days = weatherData.daily.map(function (dayData) {
+    return makeDay(dayData, metric);
+  });
+  days[0].querySelector('.name').textContent = 'Today';
   days.forEach(function (day) {
     return dailyInfo.appendChild(day);
   });
@@ -162,8 +165,8 @@ function makeDaily(weatherData) {
   return daily;
 }
 
-function loadDaily(weatherData) {
-  var daily = makeDaily(weatherData);
+function loadDaily(weatherData, metric) {
+  var daily = makeDaily(weatherData, metric);
   document.getElementById('root').appendChild(daily);
 }
 
@@ -182,6 +185,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function makeUnitButtons(metric) {
+  var unitBtns = document.createElement('div');
+  unitBtns.className = 'unit-btns';
+  var standardBtn = document.createElement('button');
+  standardBtn.className = 'standard-btn';
+  standardBtn.type = 'button';
+  standardBtn.textContent = 'Standard';
+  var metricBtn = document.createElement('button');
+  metricBtn.className = 'metric-btn';
+  metricBtn.type = 'button';
+  metricBtn.textContent = 'Metric';
+
+  if (!!metric) {
+    metricBtn.classList.add('in-use');
+  } else {
+    standardBtn.classList.add('in-use');
+  }
+
+  [standardBtn, metricBtn].forEach(function (elem) {
+    return unitBtns.appendChild(elem);
+  });
+  return unitBtns;
+}
+
+function makeControlPanel(metric) {
+  var controlPanel = document.createElement('div');
+  controlPanel.className = 'control-panel';
+  var units = makeUnitButtons(metric);
+  var location = document.createElement('button');
+  location.className = 'change-location';
+  location.textContent = 'Change location';
+  [units, location].forEach(function (elem) {
+    return controlPanel.appendChild(elem);
+  });
+  return controlPanel;
+}
+
 function makeLocale(weatherData) {
   var state = weatherData.state ? weatherData.state : weatherData.country;
   var locale = document.createElement('div');
@@ -197,7 +237,7 @@ function makeLocale(weatherData) {
   return locale;
 }
 
-function makeCurrent(weatherData) {
+function makeCurrent(weatherData, metric) {
   var current = document.createElement('div');
   current.className = 'current';
   var icon = document.createElement('img');
@@ -207,10 +247,10 @@ function makeCurrent(weatherData) {
   info.className = 'info';
   var temperature = document.createElement('div');
   temperature.className = 'temperature';
-  temperature.textContent = "".concat(weatherData.current.temperature.f, "\xB0");
+  temperature.textContent = !!metric ? "".concat(weatherData.current.temperature.c, "\xB0") : "".concat(weatherData.current.temperature.f, "\xB0");
   var hiLoFeel = document.createElement('div');
   hiLoFeel.className = 'hi-lo-feel';
-  hiLoFeel.innerText = "".concat(weatherData.daily[0].highTemp.f, "\xB0 / ").concat(weatherData.daily[0].lowTemp.f, "\xB0\n    Feels like ").concat(weatherData.current.feelsLike.f, "\xB0");
+  hiLoFeel.innerText = !!metric ? "".concat(weatherData.daily[0].highTemp.c, "\xB0 / ").concat(weatherData.daily[0].lowTemp.c, "\xB0\n    Feels like ").concat(weatherData.current.feelsLike.c, "\xB0") : "".concat(weatherData.daily[0].highTemp.f, "\xB0 / ").concat(weatherData.daily[0].lowTemp.f, "\xB0\n    Feels like ").concat(weatherData.current.feelsLike.f, "\xB0");
   info.appendChild(temperature);
   info.appendChild(hiLoFeel);
   current.appendChild(icon);
@@ -218,7 +258,7 @@ function makeCurrent(weatherData) {
   return current;
 }
 
-function makeHour(hourData) {
+function makeHour(hourData, metric) {
   var tile = document.createElement('div');
   tile.className = 'hour';
   var time = document.createElement('div');
@@ -229,7 +269,7 @@ function makeHour(hourData) {
   icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(hourData.iconCode, ".svg"));
   var temperature = document.createElement('div');
   temperature.className = 'temperature';
-  temperature.textContent = "".concat(hourData.temperature.f, "\xB0");
+  temperature.textContent = !!metric ? "".concat(hourData.temperature.c, "\xB0") : "".concat(hourData.temperature.f, "\xB0");
   var precipitation = document.createElement('div');
   precipitation.className = 'precipitation';
   var raindrop = document.createElement('img');
@@ -245,34 +285,150 @@ function makeHour(hourData) {
   return tile;
 }
 
-function makeHourly(weatherData) {
+function makeHourly(weatherData, metric) {
   var hourly = document.createElement('div');
   hourly.className = 'hourly';
-  var hours = weatherData.hourly.map(makeHour);
+  var hours = weatherData.hourly.map(function (hourData) {
+    return makeHour(hourData, metric);
+  });
   hours.forEach(function (hour) {
     return hourly.appendChild(hour);
   });
   return hourly;
 }
 
-function makeMain(weatherData) {
+function makeMain(weatherData, metric) {
   var main = document.createElement('div');
   main.className = 'tile';
+  var controls = makeControlPanel(metric);
   var locale = makeLocale(weatherData);
-  var current = makeCurrent(weatherData);
-  var hourly = makeHourly(weatherData);
-  [locale, current, hourly].forEach(function (elem) {
+  var current = makeCurrent(weatherData, metric);
+  var hourly = makeHourly(weatherData, metric);
+  [controls, locale, current, hourly].forEach(function (elem) {
     return main.appendChild(elem);
   });
   return main;
 }
 
-function loadMain(weatherData) {
-  var main = makeMain(weatherData);
+function loadMain(weatherData, metric) {
+  var main = makeMain(weatherData, metric);
   document.getElementById('root').appendChild(main);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (loadMain);
+
+/***/ }),
+
+/***/ "./src/modal.js":
+/*!**********************!*\
+  !*** ./src/modal.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _us_states_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./us-states.json */ "./src/us-states.json");
+/* harmony import */ var _countries_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./countries.json */ "./src/countries.json");
+
+
+var usStateNames = Object.values(_us_states_json__WEBPACK_IMPORTED_MODULE_0__);
+var usStateCodes = Object.keys(_us_states_json__WEBPACK_IMPORTED_MODULE_0__);
+var countryNames = Object.values(_countries_json__WEBPACK_IMPORTED_MODULE_1__).sort(function (a, b) {
+  return a < b ? -1 : 1;
+});
+var countryCodes = Object.keys(_countries_json__WEBPACK_IMPORTED_MODULE_1__);
+
+function makeCityInput() {
+  var cityInput = document.createElement('input');
+  cityInput.className = 'city-input';
+  cityInput.type = 'text';
+  cityInput.placeholder = 'City';
+  return cityInput;
+}
+
+function makeStateInput() {
+  var stateInput = document.createElement('select');
+  stateInput.className = 'state-input';
+  stateInput.disabled = true;
+  var stateDefault = document.createElement('option');
+  stateDefault.textContent = 'State or Territory (US only)';
+  stateDefault.value = '';
+  stateInput.appendChild(stateDefault);
+  usStateNames.forEach(function (state) {
+    var option = document.createElement('option');
+    option.textContent = state;
+    option.value = usStateCodes.filter(function (code) {
+      return _us_states_json__WEBPACK_IMPORTED_MODULE_0__[code] === state;
+    });
+    stateInput.appendChild(option);
+  });
+  return stateInput;
+}
+
+function makeCountryInput() {
+  var countryInput = document.createElement('select');
+  countryInput.className = 'country-input';
+
+  countryInput.oninput = function () {
+    if (countryInput.value === 'US') {
+      document.querySelector('.state-input').disabled = false;
+    }
+  };
+
+  var countryDefault = document.createElement('option');
+  countryDefault.textContent = 'Country';
+  countryDefault.value = '';
+  countryInput.appendChild(countryDefault);
+  countryNames.forEach(function (country) {
+    var option = document.createElement('option');
+    option.textContent = country;
+    option.value = countryCodes.filter(function (code) {
+      return _countries_json__WEBPACK_IMPORTED_MODULE_1__[code] === country;
+    });
+    countryInput.appendChild(option);
+  });
+  return countryInput;
+}
+
+function makeModal() {
+  var modal = document.createElement('div');
+  modal.className = 'modal';
+  var modalContent = document.createElement('div');
+  modalContent.className = 'modal-content';
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'close-btn';
+  closeBtn.type = 'button';
+  var cross = document.createElement('img');
+  cross.src = __webpack_require__(/*! ./Icons/cross.svg */ "./src/Icons/cross.svg");
+  var inputs = document.createElement('div');
+  inputs.className = 'inputs';
+  var cityInput = makeCityInput();
+  var countryInput = makeCountryInput();
+  var stateInput = makeStateInput();
+  [cityInput, countryInput, stateInput].forEach(function (input) {
+    inputs.appendChild(input);
+  });
+  var searchBtn = document.createElement('button');
+  searchBtn.className = 'search-btn';
+  searchBtn.type = 'button';
+  searchBtn.textContent = 'Search';
+  closeBtn.appendChild(cross);
+  [closeBtn, inputs, searchBtn].forEach(function (elem) {
+    modalContent.appendChild(elem);
+  });
+  modal.appendChild(modalContent);
+  return modal;
+}
+
+function loadModal() {
+  var modal = makeModal();
+  document.body.appendChild(modal);
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (loadModal);
 
 /***/ }),
 
@@ -382,7 +538,9 @@ function getLocalDateAndTime(utcUnixTime, timezoneOffset) {
     minute: minute,
     fullDate: fullDate,
     fullTime: fullTime,
-    fullDateAndTime: fullDateAndTime
+    fullDateAndTime: fullDateAndTime,
+    timezoneOffset: timezoneOffset // needed for updating clock
+
   };
 }
 
@@ -1532,6 +1690,7 @@ var map = {
 	"./UV Index.svg": "./src/Icons/UV Index.svg",
 	"./Wind.svg": "./src/Icons/Wind.svg",
 	"./arrow.svg": "./src/Icons/arrow.svg",
+	"./cross.svg": "./src/Icons/cross.svg",
 	"./raindrop.svg": "./src/Icons/raindrop.svg"
 };
 
@@ -2239,6 +2398,17 @@ module.exports = __webpack_require__.p + "Images/07d13a4c101c2d943745.svg";
 
 /***/ }),
 
+/***/ "./src/Icons/cross.svg":
+/*!*****************************!*\
+  !*** ./src/Icons/cross.svg ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/36beacb9e7cff16b27b4.svg";
+
+/***/ }),
+
 /***/ "./src/Icons/raindrop.svg":
 /*!********************************!*\
   !*** ./src/Icons/raindrop.svg ***!
@@ -2394,13 +2564,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
 /* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _countries_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./countries.json */ "./src/countries.json");
-/* harmony import */ var _us_states_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./us-states.json */ "./src/us-states.json");
-/* harmony import */ var _us_cities_json__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./us-cities.json */ "./src/us-cities.json");
-/* harmony import */ var _weatherDataTools__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./weatherDataTools */ "./src/weatherDataTools.js");
-/* harmony import */ var _mainTile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mainTile */ "./src/mainTile.js");
-/* harmony import */ var _dailyTile__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./dailyTile */ "./src/dailyTile.js");
-/* harmony import */ var _auxTile__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./auxTile */ "./src/auxTile.js");
+/* harmony import */ var _weatherDataTools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./weatherDataTools */ "./src/weatherDataTools.js");
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modal */ "./src/modal.js");
+/* harmony import */ var _mainTile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mainTile */ "./src/mainTile.js");
+/* harmony import */ var _dailyTile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./dailyTile */ "./src/dailyTile.js");
+/* harmony import */ var _auxTile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auxTile */ "./src/auxTile.js");
+/* harmony import */ var _timeTools__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./timeTools */ "./src/timeTools.js");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
 
@@ -2410,14 +2582,135 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-(0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_5__["default"])('Hendersonville', 'NC', 'US').then(function (data) {
-  var background = __webpack_require__("./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$")("./".concat(data.current.iconCode, ".jpg"));
+var currentData; // for caching current locale data
 
-  document.documentElement.style.backgroundImage = "url(".concat(background, ")");
-  (0,_mainTile__WEBPACK_IMPORTED_MODULE_6__["default"])(data);
-  (0,_dailyTile__WEBPACK_IMPORTED_MODULE_7__["default"])(data);
-  (0,_auxTile__WEBPACK_IMPORTED_MODULE_8__["default"])(data);
-}); // const usCityIds = Array.from(usCities, (city) => city.id);
+function clearTiles() {
+  var root = document.getElementById('root');
+  var tiles = Array.from(document.getElementsByClassName('tile'));
+  tiles.forEach(function (tile) {
+    return root.removeChild(tile);
+  });
+}
+
+function addUnitsHandler() {
+  var unitBtns = document.querySelector('.unit-btns');
+  unitBtns.addEventListener('click', function (e) {
+    if (e.target.classList.contains('in-use')) return;
+    var metric = e.target.className === 'metric-btn' ? true : false;
+    clearTiles(); // Removes click listeners too...
+
+    (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData, metric);
+    (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData, metric);
+    (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData, metric);
+    addUnitsHandler(); // ...which is why
+
+    addLocationHandler(); // we need these.
+  });
+}
+
+function addLocationHandler() {
+  var changeLocation = document.querySelector('.change-location');
+  changeLocation.addEventListener('click', openModal);
+}
+
+function showWeather(_x, _x2, _x3) {
+  return _showWeather.apply(this, arguments);
+}
+
+function _showWeather() {
+  _showWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
+    var backgroundImg;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return (0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_2__["default"])(city, state, country);
+
+          case 2:
+            currentData = _context.sent;
+            backgroundImg = __webpack_require__("./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$")("./".concat(currentData.current.iconCode, ".jpg"));
+            document.querySelector('#background').style.backgroundImage = "url(".concat(backgroundImg, ")");
+            clearTiles();
+            (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData);
+            (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData);
+            (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData);
+            addUnitsHandler();
+            addLocationHandler();
+
+          case 11:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _showWeather.apply(this, arguments);
+}
+
+function closeModal() {
+  var modal = document.querySelector('.modal');
+  modal.classList.remove('open');
+  setTimeout(function () {
+    return document.body.removeChild(modal);
+  }, 0);
+}
+
+function showModal() {
+  var modal = document.querySelector('.modal');
+  setTimeout(function () {
+    return modal.classList.add('open');
+  }, 0);
+}
+
+function addModalHandlers() {
+  var modal = document.querySelector('.modal');
+  var searchBtn = document.querySelector('.search-btn');
+  var closeBtn = document.querySelector('.close-btn');
+  var cityInput = document.querySelector('.city-input');
+  var stateInput = document.querySelector('.state-input');
+  var countryInput = document.querySelector('.country-input');
+  var noWeatherYet = !document.querySelector('.tile');
+  if (noWeatherYet) closeBtn.style.visibility = 'hidden';
+  closeBtn.addEventListener('click', closeModal);
+  window.addEventListener('click', function (e) {
+    if (e.target === modal && !noWeatherYet) {
+      closeModal();
+    } // close if anywhere outside modal-content is clicked (if weather already shown)
+
+  });
+  searchBtn.addEventListener('click', function () {
+    showWeather(cityInput.value, stateInput.value, countryInput.value);
+    closeModal();
+  });
+}
+
+function openModal() {
+  (0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  showModal();
+  addModalHandlers();
+}
+
+var refreshClock = setInterval(function () {
+  if (!!currentData) {
+    var currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
+
+    var dateAndTime = document.getElementsByClassName('date-and-time')[0];
+    dateAndTime.textContent = (0,_timeTools__WEBPACK_IMPORTED_MODULE_7__["default"])(currentUnixTime, currentData.current.dateAndTime.timezoneOffset).fullDateAndTime;
+  }
+}, 30000);
+openModal(); // getWeatherData('Colorado Springs', 'CO', 'US').then((data) => {
+//   currentData = data; // cache current locale data
+//   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
+//   document.documentElement.style.backgroundImage = `url(${background})`;
+//   loadMain(data);
+//   loadDaily(data);
+//   loadAuxiliary(data);
+//   loadModal();
+//   handleUnits();
+// });
+// linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 50%),
+// const usCityIds = Array.from(usCities, (city) => city.id);
 // const usStateNames = Object.values(usStates);
 // const usStateCodes = Object.keys(usStates);
 // const body = document.querySelector('body');
