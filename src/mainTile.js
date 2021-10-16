@@ -1,14 +1,20 @@
+import openModal from './modal';
+import { updateUnits } from './index';
+
 function makeUnitButtons(metric) {
   const unitBtns = document.createElement('div');
   unitBtns.className = 'unit-btns';
+  unitBtns.addEventListener('click', updateUnits);
   const standardBtn = document.createElement('button');
   standardBtn.className = 'standard-btn';
   standardBtn.type = 'button';
   standardBtn.textContent = 'Standard';
+  standardBtn.title = '°F | mph';
   const metricBtn = document.createElement('button');
   metricBtn.className = 'metric-btn';
   metricBtn.type = 'button';
   metricBtn.textContent = 'Metric';
+  metricBtn.title = '°C | km/h';
 
   if (!!metric) {
     metricBtn.classList.add('in-use');
@@ -28,6 +34,8 @@ function makeControlPanel(metric) {
   const location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location';
+  location.addEventListener('click', openModal);
+
   [units, location].forEach((elem) => controlPanel.appendChild(elem));
 
   return controlPanel;

@@ -1,3 +1,4 @@
+import { updateWeather } from './index';
 import usStates from './us-states.json';
 import countries from './countries.json';
 
@@ -60,16 +61,26 @@ function makeCountryInput() {
 }
 
 function makeModal() {
+  const noWeatherYet = !document.querySelector('.tile');
+
   const modal = document.createElement('div');
   modal.className = 'modal';
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
+  modal.addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  });
 
   const closeBtn = document.createElement('button');
   closeBtn.className = 'close-btn';
   closeBtn.type = 'button';
+  if (noWeatherYet) closeBtn.style.visibility = 'hidden';
   const cross = document.createElement('img');
   cross.src = require('./Icons/cross.svg');
+  closeBtn.appendChild(cross);
+  closeBtn.addEventListener('click', closeModal);
 
   const inputs = document.createElement('div');
   inputs.className = 'inputs';
@@ -84,8 +95,7 @@ function makeModal() {
   searchBtn.className = 'search-btn';
   searchBtn.type = 'button';
   searchBtn.textContent = 'Search';
-
-  closeBtn.appendChild(cross);
+  searchBtn.addEventListener('click', goToWeather);
 
   [closeBtn, inputs, searchBtn].forEach((elem) => {
     modalContent.appendChild(elem);
@@ -101,4 +111,39 @@ function loadModal() {
   document.body.appendChild(modal);
 }
 
-export default loadModal;
+function showModal() {
+  const modal = document.querySelector('.modal');
+  setTimeout(() => modal.classList.add('open'), 0);
+}
+
+function openModal() {
+  loadModal();
+  showModal();
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal');
+
+  modal.classList.remove('open');
+  setTimeout(() => document.body.removeChild(modal), 400);
+}
+
+function goToWeather() {
+  const modalContent = document.querySelector('.modal-content');
+  const cityInput = document.querySelector('.city-input');
+  const stateInput = document.querySelector('.state-input');
+  const countryInput = document.querySelector('.country-input');
+
+  if (!cityInput.value && !countryInput.value) {
+    modalContent.setAttribute('error', 'Please enter a location');
+  } else if (!cityInput.value) {
+    modalContent.setAttribute('error', 'Please enter a city');
+  } else if (!countryInput.value) {
+    modalContent.setAttribute('error', 'Please enter a country');
+  } else {
+    updateWeather(cityInput.value.trim(), stateInput.value, countryInput.value);
+    closeModal();
+  }
+}
+
+export default openModal;
