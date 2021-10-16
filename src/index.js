@@ -9,25 +9,13 @@ import getLocalDateAndTime from './timeTools';
 
 let currentData; // for caching current locale data
 
-const refreshClock = (() => {
-  const interval = setInterval(() => {
-    if (!!currentData) {
-      const currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
-      const dateAndTime = document.getElementsByClassName('date-and-time')[0];
-      dateAndTime.textContent = getLocalDateAndTime(
-        currentUnixTime,
-        currentData.current.dateAndTime.timezoneOffset
-      ).fullDateAndTime;
-    }
-  }, 30000);
-})();
-
 function clearTiles() {
   const root = document.getElementById('root');
-  while (root.firstChild) root.removeChild(root.firstChild);
+  const tiles = Array.from(document.getElementsByClassName('tile'));
+  tiles.forEach((tile) => root.removeChild(tile));
 }
 
-function handleUnits() {
+function addUnitsHandler() {
   const unitBtns = document.querySelector('.unit-btns');
 
   unitBtns.addEventListener('click', (e) => {
@@ -35,26 +23,103 @@ function handleUnits() {
 
     const metric = e.target.className === 'metric-btn' ? true : false;
 
-    clearTiles();
+    clearTiles(); // Removes click listeners too...
     loadMain(currentData, metric);
     loadDaily(currentData, metric);
     loadAuxiliary(currentData, metric);
-    handleUnits(); // *** recursion needed because click listeners get removed on unit-change
+    addUnitsHandler(); // ...which is why
+    addLocationHandler(); // we need these.
   });
 }
 
-getWeatherData('Colorado Springs', 'CO', 'US').then((data) => {
-  currentData = data; // cache current locale data
+function addLocationHandler() {
+  const changeLocation = document.querySelector('.change-location');
+  changeLocation.addEventListener('click', openModal);
+}
 
-  const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
+async function showWeather(city, state, country) {
+  currentData = await getWeatherData(city, state, country);
+
+  const background = require(`./Backgrounds/${currentData.current.iconCode}.jpg`);
   document.documentElement.style.backgroundImage = `url(${background})`;
 
-  loadMain(data);
-  loadDaily(data);
-  loadAuxiliary(data);
+  clearTiles();
+  loadMain(currentData);
+  loadDaily(currentData);
+  loadAuxiliary(currentData);
+  addUnitsHandler();
+  addLocationHandler();
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal');
+
+  modal.classList.remove('open');
+  setTimeout(() => document.body.removeChild(modal), 0);
+}
+
+function showModal() {
+  const modal = document.querySelector('.modal');
+  setTimeout(() => modal.classList.add('open'), 0);
+}
+
+function addModalHandlers() {
+  const modal = document.querySelector('.modal');
+  const searchBtn = document.querySelector('.search-btn');
+  const closeBtn = document.querySelector('.close-btn');
+  const cityInput = document.querySelector('.city-input');
+  const stateInput = document.querySelector('.state-input');
+  const countryInput = document.querySelector('.country-input');
+  const noWeatherYet = !document.querySelector('.tile');
+
+  if (noWeatherYet) closeBtn.style.visibility = 'hidden';
+
+  closeBtn.addEventListener('click', closeModal);
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal && !noWeatherYet) {
+      closeModal();
+    } // close if anywhere outside modal-content is clicked (if weather already shown)
+  });
+
+  searchBtn.addEventListener('click', () => {
+    showWeather(cityInput.value, stateInput.value, countryInput.value);
+    closeModal();
+  });
+}
+
+function openModal() {
   loadModal();
-  handleUnits();
-});
+  showModal();
+  addModalHandlers();
+}
+
+const refreshClock = setInterval(() => {
+  if (!!currentData) {
+    const currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
+    const dateAndTime = document.getElementsByClassName('date-and-time')[0];
+
+    dateAndTime.textContent = getLocalDateAndTime(
+      currentUnixTime,
+      currentData.current.dateAndTime.timezoneOffset
+    ).fullDateAndTime;
+  }
+}, 30000);
+
+openModal();
+
+// getWeatherData('Colorado Springs', 'CO', 'US').then((data) => {
+//   currentData = data; // cache current locale data
+
+//   const background = require(`./Backgrounds/${data.current.iconCode}.jpg`);
+//   document.documentElement.style.backgroundImage = `url(${background})`;
+
+//   loadMain(data);
+//   loadDaily(data);
+//   loadAuxiliary(data);
+//   loadModal();
+//   handleUnits();
+// });
 
 // linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0) 50%),
 

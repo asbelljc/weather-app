@@ -1,33 +1,43 @@
-/* dosis-500 - latin */
+/* dosis-500 - vietnamese_latin-ext_latin */
 @font-face {
   font-family: 'Dosis';
   font-style: normal;
   font-weight: 500;
-  src: url('./Fonts/dosis-v19-latin-500.eot'); /* IE9 Compat Modes */
+  src: url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.eot'); /* IE9 Compat Modes */
   src: local(''),
-    url('./Fonts/dosis-v19-latin-500.eot?#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */ url('./Fonts/dosis-v19-latin-500.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('./Fonts/dosis-v19-latin-500.woff')
+    url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.woff')
       format('woff'),
-    /* Modern Browsers */ url('./Fonts/dosis-v19-latin-500.ttf')
+    /* Modern Browsers */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.ttf')
       format('truetype'),
-    /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-500.svg#Dosis')
+    /* Safari, Android, iOS */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-500.svg#Dosis')
       format('svg'); /* Legacy iOS */
 }
-/* dosis-800 - latin */
+/* dosis-800 - vietnamese_latin-ext_latin */
 @font-face {
   font-family: 'Dosis';
   font-style: normal;
   font-weight: 800;
-  src: url('./Fonts/dosis-v19-latin-800.eot'); /* IE9 Compat Modes */
+  src: url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.eot'); /* IE9 Compat Modes */
   src: local(''),
-    url('./Fonts/dosis-v19-latin-800.eot?#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */ url('./Fonts/dosis-v19-latin-800.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('./Fonts/dosis-v19-latin-800.woff')
+    url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.eot?#iefix')
+      format('embedded-opentype'),
+    /* IE6-IE8 */ url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.woff2')
+      format('woff2'),
+    /* Super Modern Browsers */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.woff')
       format('woff'),
-    /* Modern Browsers */ url('./Fonts/dosis-v19-latin-800.ttf')
+    /* Modern Browsers */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.ttf')
       format('truetype'),
-    /* Safari, Android, iOS */ url('./Fonts/dosis-v19-latin-800.svg#Dosis')
+    /* Safari, Android, iOS */
+      url('./Fonts/dosis-v19-vietnamese_latin-ext_latin-800.svg#Dosis')
       format('svg'); /* Legacy iOS */
 }
 /* ubuntu-mono-regular - latin */
@@ -102,7 +112,7 @@ body {
 }
 
 .modal {
-  // display: none;
+  opacity: 0;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -112,9 +122,14 @@ body {
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
+  transition: opacity 400ms;
 
   &.open {
-    display: block;
+    opacity: 1;
+
+    .modal-content {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -131,6 +146,8 @@ body {
   padding: 40px 40px 80px 40px;
   background: rgba(255, 255, 255, 0.5);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  transform: translateY(-200%);
+  transition: transform 400ms;
 }
 
 .inputs {
@@ -142,8 +159,8 @@ body {
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 18px;
+  right: 18px;
   width: 10px;
   height: 10px;
   padding: 0;
@@ -152,6 +169,10 @@ body {
 
   &:hover {
     cursor: pointer;
+  }
+
+  img {
+    display: block;
   }
 }
 

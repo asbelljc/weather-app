@@ -11,6 +11,7 @@ function makeCityInput() {
   cityInput.className = 'city-input';
   cityInput.type = 'text';
   cityInput.placeholder = 'Please enter your city';
+  cityInput.required = true;
 
   return cityInput;
 }
@@ -18,6 +19,7 @@ function makeCityInput() {
 function makeStateInput() {
   const stateInput = document.createElement('select');
   stateInput.className = 'state-input';
+  stateInput.disabled = true;
 
   const stateDefault = document.createElement('option');
   stateDefault.textContent = 'State (US only)';
@@ -37,6 +39,12 @@ function makeStateInput() {
 function makeCountryInput() {
   const countryInput = document.createElement('select');
   countryInput.className = 'country-input';
+  countryInput.required = true;
+  countryInput.oninput = () => {
+    if ((countryInput.value = 'US')) {
+      document.querySelector('.state-input').disabled = false;
+    }
+  };
 
   const countryDefault = document.createElement('option');
   countryDefault.textContent = 'Country';
@@ -92,7 +100,7 @@ function makeModal() {
 
 function loadModal() {
   const modal = makeModal();
-  document.getElementById('root').appendChild(modal);
+  document.body.appendChild(modal);
 }
 
 export default loadModal;
