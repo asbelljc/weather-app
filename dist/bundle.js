@@ -123,7 +123,7 @@ function makeWeatherPanel(dayData) {
   percentage.textContent = "".concat(Math.round(dayData.chanceOfPrecip * 100), "%");
   var icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(dayData.iconCode, ".svg"));
+  icon.src = __webpack_require__("./src/Icons/Static sync recursive ^\\.\\/.*\\.svg$")("./".concat(dayData.iconCode, ".svg"));
   [raindrop, percentage].forEach(function (elem) {
     return precipitation.appendChild(elem);
   });
@@ -466,7 +466,7 @@ function makeHour(hourData, metric) {
   time.textContent = hourData.time;
   var icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = __webpack_require__("./src/Icons sync recursive ^\\.\\/.*\\.svg$")("./".concat(hourData.iconCode, ".svg"));
+  icon.src = __webpack_require__("./src/Icons/Static sync recursive ^\\.\\/.*\\.svg$")("./".concat(hourData.iconCode, ".svg"));
   var temperature = document.createElement('div');
   temperature.className = 'temperature';
   temperature.textContent = !!metric ? "".concat(hourData.temperature.c, "\xB0") : "".concat(hourData.temperature.f, "\xB0");
@@ -1972,6 +1972,57 @@ webpackContext.id = "./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$";
 
 /***/ }),
 
+/***/ "./src/Icons/Static sync recursive ^\\.\\/.*\\.svg$":
+/*!**********************************************!*\
+  !*** ./src/Icons/Static/ sync ^\.\/.*\.svg$ ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./01d.svg": "./src/Icons/Static/01d.svg",
+	"./01n.svg": "./src/Icons/Static/01n.svg",
+	"./02d.svg": "./src/Icons/Static/02d.svg",
+	"./02n.svg": "./src/Icons/Static/02n.svg",
+	"./03d.svg": "./src/Icons/Static/03d.svg",
+	"./03n.svg": "./src/Icons/Static/03n.svg",
+	"./04d.svg": "./src/Icons/Static/04d.svg",
+	"./04n.svg": "./src/Icons/Static/04n.svg",
+	"./09d.svg": "./src/Icons/Static/09d.svg",
+	"./09n.svg": "./src/Icons/Static/09n.svg",
+	"./10d.svg": "./src/Icons/Static/10d.svg",
+	"./10n.svg": "./src/Icons/Static/10n.svg",
+	"./11d.svg": "./src/Icons/Static/11d.svg",
+	"./11n.svg": "./src/Icons/Static/11n.svg",
+	"./13d.svg": "./src/Icons/Static/13d.svg",
+	"./13n.svg": "./src/Icons/Static/13n.svg",
+	"./50d.svg": "./src/Icons/Static/50d.svg",
+	"./50n.svg": "./src/Icons/Static/50n.svg",
+	"./arrow.svg": "./src/Icons/Static/arrow.svg",
+	"./raindrop.svg": "./src/Icons/Static/raindrop.svg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/Icons/Static sync recursive ^\\.\\/.*\\.svg$";
+
+/***/ }),
+
 /***/ "./src/Icons sync recursive ^\\.\\/.*\\.svg$":
 /*!***************************************!*\
   !*** ./src/Icons/ sync ^\.\/.*\.svg$ ***!
@@ -1998,26 +2049,26 @@ var map = {
 	"./50d.svg": "./src/Icons/50d.svg",
 	"./50n.svg": "./src/Icons/50n.svg",
 	"./Humidity.svg": "./src/Icons/Humidity.svg",
-	"./Static Backups/01d.svg": "./src/Icons/Static Backups/01d.svg",
-	"./Static Backups/01n.svg": "./src/Icons/Static Backups/01n.svg",
-	"./Static Backups/02d.svg": "./src/Icons/Static Backups/02d.svg",
-	"./Static Backups/02n.svg": "./src/Icons/Static Backups/02n.svg",
-	"./Static Backups/03d.svg": "./src/Icons/Static Backups/03d.svg",
-	"./Static Backups/03n.svg": "./src/Icons/Static Backups/03n.svg",
-	"./Static Backups/04d.svg": "./src/Icons/Static Backups/04d.svg",
-	"./Static Backups/04n.svg": "./src/Icons/Static Backups/04n.svg",
-	"./Static Backups/09d.svg": "./src/Icons/Static Backups/09d.svg",
-	"./Static Backups/09n.svg": "./src/Icons/Static Backups/09n.svg",
-	"./Static Backups/10d.svg": "./src/Icons/Static Backups/10d.svg",
-	"./Static Backups/10n.svg": "./src/Icons/Static Backups/10n.svg",
-	"./Static Backups/11d.svg": "./src/Icons/Static Backups/11d.svg",
-	"./Static Backups/11n.svg": "./src/Icons/Static Backups/11n.svg",
-	"./Static Backups/13d.svg": "./src/Icons/Static Backups/13d.svg",
-	"./Static Backups/13n.svg": "./src/Icons/Static Backups/13n.svg",
-	"./Static Backups/50d.svg": "./src/Icons/Static Backups/50d.svg",
-	"./Static Backups/50n.svg": "./src/Icons/Static Backups/50n.svg",
-	"./Static Backups/arrow.svg": "./src/Icons/Static Backups/arrow.svg",
-	"./Static Backups/raindrop.svg": "./src/Icons/Static Backups/raindrop.svg",
+	"./Static/01d.svg": "./src/Icons/Static/01d.svg",
+	"./Static/01n.svg": "./src/Icons/Static/01n.svg",
+	"./Static/02d.svg": "./src/Icons/Static/02d.svg",
+	"./Static/02n.svg": "./src/Icons/Static/02n.svg",
+	"./Static/03d.svg": "./src/Icons/Static/03d.svg",
+	"./Static/03n.svg": "./src/Icons/Static/03n.svg",
+	"./Static/04d.svg": "./src/Icons/Static/04d.svg",
+	"./Static/04n.svg": "./src/Icons/Static/04n.svg",
+	"./Static/09d.svg": "./src/Icons/Static/09d.svg",
+	"./Static/09n.svg": "./src/Icons/Static/09n.svg",
+	"./Static/10d.svg": "./src/Icons/Static/10d.svg",
+	"./Static/10n.svg": "./src/Icons/Static/10n.svg",
+	"./Static/11d.svg": "./src/Icons/Static/11d.svg",
+	"./Static/11n.svg": "./src/Icons/Static/11n.svg",
+	"./Static/13d.svg": "./src/Icons/Static/13d.svg",
+	"./Static/13n.svg": "./src/Icons/Static/13n.svg",
+	"./Static/50d.svg": "./src/Icons/Static/50d.svg",
+	"./Static/50n.svg": "./src/Icons/Static/50n.svg",
+	"./Static/arrow.svg": "./src/Icons/Static/arrow.svg",
+	"./Static/raindrop.svg": "./src/Icons/Static/raindrop.svg",
 	"./Sunrise.svg": "./src/Icons/Sunrise.svg",
 	"./Sunset.svg": "./src/Icons/Sunset.svg",
 	"./UV Index.svg": "./src/Icons/UV Index.svg",
@@ -2456,10 +2507,10 @@ module.exports = __webpack_require__.p + "Images/f6f97c5f6b692e20bbb1.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/01d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/01d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/01d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/01d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2467,10 +2518,10 @@ module.exports = __webpack_require__.p + "Images/b5b0c148a6b0f10ac458.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/01n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/01n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/01n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/01n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2478,10 +2529,10 @@ module.exports = __webpack_require__.p + "Images/58546ac8c1a36fb22614.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/02d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/02d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/02d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/02d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2489,10 +2540,10 @@ module.exports = __webpack_require__.p + "Images/a223dc71c73b753676c0.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/02n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/02n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/02n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/02n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2500,10 +2551,10 @@ module.exports = __webpack_require__.p + "Images/03d21947201668f2866e.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/03d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/03d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/03d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/03d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2511,10 +2562,10 @@ module.exports = __webpack_require__.p + "Images/0639345a8e0604eb15d1.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/03n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/03n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/03n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/03n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2522,10 +2573,10 @@ module.exports = __webpack_require__.p + "Images/0639345a8e0604eb15d1.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/04d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/04d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/04d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/04d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2533,10 +2584,10 @@ module.exports = __webpack_require__.p + "Images/80bdcc715a54760520b7.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/04n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/04n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/04n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/04n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2544,65 +2595,54 @@ module.exports = __webpack_require__.p + "Images/80bdcc715a54760520b7.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/09d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/09d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/09d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/09d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "Images/5ff05f2711dc23587e35.svg";
+module.exports = __webpack_require__.p + "Images/5226841f3adc1e748f4c.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/09n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/09n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/09n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/09n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "Images/5ff05f2711dc23587e35.svg";
+module.exports = __webpack_require__.p + "Images/5226841f3adc1e748f4c.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/10d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/10d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/10d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/10d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "Images/6e70b74881307b806ccd.svg";
+module.exports = __webpack_require__.p + "Images/5ba1f31cf0227e607205.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/10n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/10n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/10n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/10n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "Images/b6f5bbd51cae297592ef.svg";
+module.exports = __webpack_require__.p + "Images/d27b3013cdc179ae66aa.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/11d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/11d.svg ***!
-  \******************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-module.exports = __webpack_require__.p + "Images/bd8b574bc77fb7449178.svg";
-
-/***/ }),
-
-/***/ "./src/Icons/Static Backups/11n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/11n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/11d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/11d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2610,10 +2650,21 @@ module.exports = __webpack_require__.p + "Images/bd8b574bc77fb7449178.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/13d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/13d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/11n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/11n.svg ***!
+  \**********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/bd8b574bc77fb7449178.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/Static/13d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/13d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2621,10 +2672,10 @@ module.exports = __webpack_require__.p + "Images/132215cb1cd1e6781d72.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/13n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/13n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/13n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/13n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2632,10 +2683,10 @@ module.exports = __webpack_require__.p + "Images/132215cb1cd1e6781d72.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/50d.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/50d.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/50d.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/50d.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2643,10 +2694,10 @@ module.exports = __webpack_require__.p + "Images/b97ec1253e759f0f91f5.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/50n.svg":
-/*!******************************************!*\
-  !*** ./src/Icons/Static Backups/50n.svg ***!
-  \******************************************/
+/***/ "./src/Icons/Static/50n.svg":
+/*!**********************************!*\
+  !*** ./src/Icons/Static/50n.svg ***!
+  \**********************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2654,10 +2705,10 @@ module.exports = __webpack_require__.p + "Images/b97ec1253e759f0f91f5.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/arrow.svg":
-/*!********************************************!*\
-  !*** ./src/Icons/Static Backups/arrow.svg ***!
-  \********************************************/
+/***/ "./src/Icons/Static/arrow.svg":
+/*!************************************!*\
+  !*** ./src/Icons/Static/arrow.svg ***!
+  \************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2665,10 +2716,10 @@ module.exports = __webpack_require__.p + "Images/f5557c01b464791b85fc.svg";
 
 /***/ }),
 
-/***/ "./src/Icons/Static Backups/raindrop.svg":
-/*!***********************************************!*\
-  !*** ./src/Icons/Static Backups/raindrop.svg ***!
-  \***********************************************/
+/***/ "./src/Icons/Static/raindrop.svg":
+/*!***************************************!*\
+  !*** ./src/Icons/Static/raindrop.svg ***!
+  \***************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";

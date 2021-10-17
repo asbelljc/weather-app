@@ -9,7 +9,7 @@ function makeWeatherPanel(dayData) {
   percentage.textContent = `${Math.round(dayData.chanceOfPrecip * 100)}%`;
   const icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = require(`./Icons/${dayData.iconCode}.svg`);
+  icon.src = require(`./Icons/Static/${dayData.iconCode}.svg`);
 
   [raindrop, percentage].forEach((elem) => precipitation.appendChild(elem));
   [precipitation, icon].forEach((elem) => weatherPanel.appendChild(elem));
