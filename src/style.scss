@@ -449,3 +449,8 @@ body {
     }
   }
 }
+
+.icon {
+  // trigger hardware acceleration for better performance
+  transform: translateZ(0) !important;
+}
