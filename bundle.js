@@ -174,6 +174,133 @@ function loadDaily(weatherData, metric) {
 
 /***/ }),
 
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "updateWeather": () => (/* binding */ updateWeather),
+/* harmony export */   "updateUnits": () => (/* binding */ updateUnits)
+/* harmony export */ });
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
+/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _weatherDataTools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./weatherDataTools */ "./src/weatherDataTools.js");
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modal */ "./src/modal.js");
+/* harmony import */ var _mainTile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mainTile */ "./src/mainTile.js");
+/* harmony import */ var _dailyTile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./dailyTile */ "./src/dailyTile.js");
+/* harmony import */ var _auxTile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auxTile */ "./src/auxTile.js");
+/* harmony import */ var _timeTools__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./timeTools */ "./src/timeTools.js");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+
+
+
+
+
+
+var currentData; // for caching current locale data
+
+var isMetricSet = false; // for caching selected units
+
+var updateInterval; // for auto-updating weather
+
+function clearTiles() {
+  var root = document.getElementById('root');
+  var tiles = Array.from(document.getElementsByClassName('tile'));
+  tiles.forEach(function (tile) {
+    return root.removeChild(tile);
+  });
+}
+
+function updateUnits(e) {
+  if (e.target.classList.contains('in-use')) return;
+  isMetricSet = e.target.className === 'metric-btn' ? true : false;
+  showWeather();
+}
+
+function cacheWeatherData(_x, _x2, _x3) {
+  return _cacheWeatherData.apply(this, arguments);
+}
+
+function _cacheWeatherData() {
+  _cacheWeatherData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return (0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_2__["default"])(city, state, country);
+
+          case 2:
+            currentData = _context.sent;
+
+          case 3:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _cacheWeatherData.apply(this, arguments);
+}
+
+function showWeather() {
+  var backgroundImg = __webpack_require__("./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$")("./".concat(currentData.current.iconCode, ".jpg"));
+
+  document.querySelector('#background').style.backgroundImage = "url(".concat(backgroundImg, ")");
+  clearTiles();
+  (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData, isMetricSet);
+  (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData, isMetricSet);
+  (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData, isMetricSet);
+}
+
+function updateWeather(city, state, country) {
+  cacheWeatherData(city, state, country).then(function () {
+    showWeather();
+    setAutoUpdate();
+  });
+}
+
+function setAutoUpdate() {
+  clearInterval(updateInterval);
+  updateInterval = setInterval(function () {
+    updateWeather(currentData.city, currentData.state, currentData.country);
+  }, 600000);
+}
+
+function refreshClock() {
+  setInterval(function () {
+    // refresh clock every 30 seconds
+    if (!!currentData) {
+      var currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
+
+      var dateAndTime = document.getElementsByClassName('date-and-time')[0];
+      dateAndTime.textContent = (0,_timeTools__WEBPACK_IMPORTED_MODULE_7__["default"])(currentUnixTime, currentData.current.dateAndTime.timezoneOffset).fullDateAndTime;
+    }
+  }, 30000);
+}
+
+(0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
+refreshClock();
+
+/*
+
+TO DO
+[ ] Add error handling for rejected calls
+
+*/
+
+/***/ }),
+
 /***/ "./src/mainTile.js":
 /*!*************************!*\
   !*** ./src/mainTile.js ***!
@@ -185,17 +312,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal */ "./src/modal.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./index */ "./src/index.js");
+
+
+
 function makeUnitButtons(metric) {
   var unitBtns = document.createElement('div');
   unitBtns.className = 'unit-btns';
+  unitBtns.addEventListener('click', _index__WEBPACK_IMPORTED_MODULE_1__.updateUnits);
   var standardBtn = document.createElement('button');
   standardBtn.className = 'standard-btn';
   standardBtn.type = 'button';
   standardBtn.textContent = 'Standard';
+  standardBtn.title = '°F | mph';
   var metricBtn = document.createElement('button');
   metricBtn.className = 'metric-btn';
   metricBtn.type = 'button';
   metricBtn.textContent = 'Metric';
+  metricBtn.title = '°C | km/h';
 
   if (!!metric) {
     metricBtn.classList.add('in-use');
@@ -216,6 +351,7 @@ function makeControlPanel(metric) {
   var location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location';
+  location.addEventListener('click', _modal__WEBPACK_IMPORTED_MODULE_0__["default"]);
   [units, location].forEach(function (elem) {
     return controlPanel.appendChild(elem);
   });
@@ -330,16 +466,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _us_states_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./us-states.json */ "./src/us-states.json");
-/* harmony import */ var _countries_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./countries.json */ "./src/countries.json");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.js");
+/* harmony import */ var _us_states_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./us-states.json */ "./src/us-states.json");
+/* harmony import */ var _countries_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./countries.json */ "./src/countries.json");
 
 
-var usStateNames = Object.values(_us_states_json__WEBPACK_IMPORTED_MODULE_0__);
-var usStateCodes = Object.keys(_us_states_json__WEBPACK_IMPORTED_MODULE_0__);
-var countryNames = Object.values(_countries_json__WEBPACK_IMPORTED_MODULE_1__).sort(function (a, b) {
+
+var usStateNames = Object.values(_us_states_json__WEBPACK_IMPORTED_MODULE_1__);
+var usStateCodes = Object.keys(_us_states_json__WEBPACK_IMPORTED_MODULE_1__);
+var countryNames = Object.values(_countries_json__WEBPACK_IMPORTED_MODULE_2__).sort(function (a, b) {
   return a < b ? -1 : 1;
 });
-var countryCodes = Object.keys(_countries_json__WEBPACK_IMPORTED_MODULE_1__);
+var countryCodes = Object.keys(_countries_json__WEBPACK_IMPORTED_MODULE_2__);
 
 function makeCityInput() {
   var cityInput = document.createElement('input');
@@ -361,7 +499,7 @@ function makeStateInput() {
     var option = document.createElement('option');
     option.textContent = state;
     option.value = usStateCodes.filter(function (code) {
-      return _us_states_json__WEBPACK_IMPORTED_MODULE_0__[code] === state;
+      return _us_states_json__WEBPACK_IMPORTED_MODULE_1__[code] === state;
     });
     stateInput.appendChild(option);
   });
@@ -386,7 +524,7 @@ function makeCountryInput() {
     var option = document.createElement('option');
     option.textContent = country;
     option.value = countryCodes.filter(function (code) {
-      return _countries_json__WEBPACK_IMPORTED_MODULE_1__[code] === country;
+      return _countries_json__WEBPACK_IMPORTED_MODULE_2__[code] === country;
     });
     countryInput.appendChild(option);
   });
@@ -394,15 +532,24 @@ function makeCountryInput() {
 }
 
 function makeModal() {
+  var noWeatherYet = !document.querySelector('.tile');
   var modal = document.createElement('div');
   modal.className = 'modal';
   var modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
+  modal.addEventListener('click', function (e) {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  });
   var closeBtn = document.createElement('button');
   closeBtn.className = 'close-btn';
   closeBtn.type = 'button';
+  if (noWeatherYet) closeBtn.style.visibility = 'hidden';
   var cross = document.createElement('img');
   cross.src = __webpack_require__(/*! ./Icons/cross.svg */ "./src/Icons/cross.svg");
+  closeBtn.appendChild(cross);
+  closeBtn.addEventListener('click', closeModal);
   var inputs = document.createElement('div');
   inputs.className = 'inputs';
   var cityInput = makeCityInput();
@@ -415,7 +562,7 @@ function makeModal() {
   searchBtn.className = 'search-btn';
   searchBtn.type = 'button';
   searchBtn.textContent = 'Search';
-  closeBtn.appendChild(cross);
+  searchBtn.addEventListener('click', goToWeather);
   [closeBtn, inputs, searchBtn].forEach(function (elem) {
     modalContent.appendChild(elem);
   });
@@ -428,7 +575,45 @@ function loadModal() {
   document.body.appendChild(modal);
 }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (loadModal);
+function showModal() {
+  var modal = document.querySelector('.modal');
+  setTimeout(function () {
+    return modal.classList.add('open');
+  }, 0);
+}
+
+function openModal() {
+  loadModal();
+  showModal();
+}
+
+function closeModal() {
+  var modal = document.querySelector('.modal');
+  modal.classList.remove('open');
+  setTimeout(function () {
+    return document.body.removeChild(modal);
+  }, 400);
+}
+
+function goToWeather() {
+  var modalContent = document.querySelector('.modal-content');
+  var cityInput = document.querySelector('.city-input');
+  var stateInput = document.querySelector('.state-input');
+  var countryInput = document.querySelector('.country-input');
+
+  if (!cityInput.value && !countryInput.value) {
+    modalContent.setAttribute('error', 'Please enter a location');
+  } else if (!cityInput.value) {
+    modalContent.setAttribute('error', 'Please enter a city');
+  } else if (!countryInput.value) {
+    modalContent.setAttribute('error', 'Please enter a country');
+  } else {
+    (0,_index__WEBPACK_IMPORTED_MODULE_0__.updateWeather)(cityInput.value.trim(), stateInput.value, countryInput.value);
+    closeModal();
+  }
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (openModal);
 
 /***/ }),
 
@@ -2553,182 +2738,12 @@ module.exports = JSON.parse('{"AL":"Alabama","AK":"Alaska","AS":"American Samoa"
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! regenerator-runtime/runtime */ "./node_modules/regenerator-runtime/runtime.js");
-/* harmony import */ var regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(regenerator_runtime_runtime__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _weatherDataTools__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./weatherDataTools */ "./src/weatherDataTools.js");
-/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modal */ "./src/modal.js");
-/* harmony import */ var _mainTile__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mainTile */ "./src/mainTile.js");
-/* harmony import */ var _dailyTile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./dailyTile */ "./src/dailyTile.js");
-/* harmony import */ var _auxTile__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./auxTile */ "./src/auxTile.js");
-/* harmony import */ var _timeTools__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./timeTools */ "./src/timeTools.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-
-
-
-
-
-
-
-var currentData; // for caching current locale data
-
-var refreshInterval; // for auto-updating weather
-
-function clearTiles() {
-  var root = document.getElementById('root');
-  var tiles = Array.from(document.getElementsByClassName('tile'));
-  tiles.forEach(function (tile) {
-    return root.removeChild(tile);
-  });
-}
-
-function addUnitsHandler() {
-  var unitBtns = document.querySelector('.unit-btns');
-  unitBtns.addEventListener('click', function (e) {
-    if (e.target.classList.contains('in-use')) return;
-    var metric = e.target.className === 'metric-btn' ? true : false;
-    clearTiles(); // Removes click listeners too...
-
-    (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData, metric);
-    (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData, metric);
-    (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData, metric);
-    addUnitsHandler(); // ...which is why
-
-    addLocationHandler(); // we need these.
-  });
-}
-
-function addLocationHandler() {
-  var changeLocation = document.querySelector('.change-location');
-  changeLocation.addEventListener('click', openModal);
-}
-
-function showWeather(_x, _x2, _x3) {
-  return _showWeather.apply(this, arguments);
-}
-
-function _showWeather() {
-  _showWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
-    var backgroundImg;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return (0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_2__["default"])(city, state, country);
-
-          case 2:
-            currentData = _context.sent;
-            backgroundImg = __webpack_require__("./src/Backgrounds sync recursive ^\\.\\/.*\\.jpg$")("./".concat(currentData.current.iconCode, ".jpg"));
-            document.querySelector('#background').style.backgroundImage = "url(".concat(backgroundImg, ")");
-            clearTiles();
-            (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData);
-            (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData);
-            (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData);
-            addUnitsHandler();
-            addLocationHandler();
-            clearInterval(refreshInterval);
-            setTimeout(refreshWeather, 0);
-
-          case 13:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _showWeather.apply(this, arguments);
-}
-
-function closeModal() {
-  var modal = document.querySelector('.modal');
-  modal.classList.remove('open');
-  setTimeout(function () {
-    return document.body.removeChild(modal);
-  }, 400);
-}
-
-function showModal() {
-  var modal = document.querySelector('.modal');
-  setTimeout(function () {
-    return modal.classList.add('open');
-  }, 0);
-}
-
-function addModalHandlers() {
-  var modal = document.querySelector('.modal');
-  var modalContent = document.querySelector('.modal-content');
-  var searchBtn = document.querySelector('.search-btn');
-  var closeBtn = document.querySelector('.close-btn');
-  var cityInput = document.querySelector('.city-input');
-  var stateInput = document.querySelector('.state-input');
-  var countryInput = document.querySelector('.country-input');
-  var noWeatherYet = !document.querySelector('.tile');
-  if (noWeatherYet) closeBtn.style.visibility = 'hidden';
-  closeBtn.addEventListener('click', closeModal);
-  window.addEventListener('click', function (e) {
-    if (e.target === modal && !noWeatherYet) {
-      closeModal(); // close if anywhere outside modal-content is clicked (unless no weather shown)
-    }
-  });
-  searchBtn.addEventListener('click', function () {
-    if (!cityInput.value && !countryInput.value) {
-      modalContent.setAttribute('error', 'Please enter a location');
-    } else if (!cityInput.value) {
-      modalContent.setAttribute('error', 'Please enter a city');
-    } else if (!countryInput.value) {
-      modalContent.setAttribute('error', 'Please enter a country');
-    } else {
-      showWeather(cityInput.value.trim(), stateInput.value, countryInput.value);
-      closeModal();
-    }
-  });
-}
-
-function openModal() {
-  (0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  showModal();
-  addModalHandlers();
-}
-
-function refreshWeather() {
-  // refresh data every 10 minutes
-  refreshInterval = setInterval(function () {
-    showWeather(currentData.city, currentData.state, currentData.country);
-    console.log('hey');
-  }, 600000);
-}
-
-var refreshClock = setInterval(function () {
-  // refresh clock every 30 seconds
-  if (!!currentData) {
-    var currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
-
-    var dateAndTime = document.getElementsByClassName('date-and-time')[0];
-    dateAndTime.textContent = (0,_timeTools__WEBPACK_IMPORTED_MODULE_7__["default"])(currentUnixTime, currentData.current.dateAndTime.timezoneOffset).fullDateAndTime;
-  }
-}, 30000);
-openModal();
-/*
-
-TO DO
-[ ] Add error handling for rejected calls
-
-*/
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=bundle.js.map
