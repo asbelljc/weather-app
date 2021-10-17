@@ -108,6 +108,7 @@ body.locked {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
   transform: translateY(-200%);
   transition: transform 400ms;
+  --msg-color: none;
 }
 .modal-content::before {
   position: absolute;
@@ -117,9 +118,9 @@ body.locked {
   margin: 0 auto;
   width: max-content;
   font-size: 14px;
-  color: #dc0000;
+  color: var(--msg-color);
   text-align: center;
-  content: attr(error);
+  content: attr(message);
 }
 
 .inputs {

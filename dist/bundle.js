@@ -207,11 +207,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var currentData; // for caching current locale data
+var currentData; // cache current locale weather data for easier unit change
 
-var isMetricSet = false; // for caching selected units
+var isMetricSet = false; // cache units so they stay the same after location change
 
 var updateInterval; // for auto-updating weather
+// MDN's suggested check for localStorage availability.
+
+function storageAvailable(type) {
+  var storage;
+
+  try {
+    storage = window[type];
+    var x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return e instanceof DOMException && (e.code === 22 || // Firefox
+    e.code === 1014 || // test name field too, because code might not be present
+    // everything except Firefox
+    e.name === 'QuotaExceededError' || // Firefox
+    e.name === 'NS_ERROR_DOM_QUOTA_REACHED') && // acknowledge QuotaExceededError only if there's something already stored
+    storage && storage.length !== 0;
+  }
+}
+
+function setLocalStorage() {
+  if (storageAvailable('localStorage')) {
+    // only need to save location data to localStorage
+    localStorage.setItem('currentData', JSON.stringify({
+      city: currentData.city,
+      state: currentData.state,
+      country: currentData.country
+    }));
+    localStorage.setItem('isMetricSet', JSON.stringify(isMetricSet));
+  }
+}
+
+function getLocalStorage() {
+  if (storageAvailable('localStorage')) {
+    currentData = JSON.parse(localStorage.getItem('currentData'));
+    isMetricSet = JSON.parse(localStorage.getItem('isMetricSet'));
+  }
+}
 
 function clearTiles() {
   var root = document.getElementById('root');
@@ -261,16 +300,37 @@ function showWeather() {
   (0,_mainTile__WEBPACK_IMPORTED_MODULE_4__["default"])(currentData, isMetricSet);
   (0,_dailyTile__WEBPACK_IMPORTED_MODULE_5__["default"])(currentData, isMetricSet);
   (0,_auxTile__WEBPACK_IMPORTED_MODULE_6__["default"])(currentData, isMetricSet);
+  setLocalStorage();
 }
 
-function updateWeather(city, state, country) {
-  cacheWeatherData(city, state, country).then(function () {
-    showWeather();
-    setAutoUpdate();
-  });
+function updateWeather(_x4, _x5, _x6) {
+  return _updateWeather.apply(this, arguments);
+}
+
+function _updateWeather() {
+  _updateWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(city, state, country) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return cacheWeatherData(city, state, country).then(function () {
+              showWeather();
+              setAutoUpdate();
+            });
+
+          case 2:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _updateWeather.apply(this, arguments);
 }
 
 function setAutoUpdate() {
+  // update weather every 10 minutes
   clearInterval(updateInterval);
   updateInterval = setInterval(function () {
     updateWeather(currentData.city, currentData.state, currentData.country);
@@ -280,7 +340,7 @@ function setAutoUpdate() {
 function refreshClock() {
   setInterval(function () {
     // refresh clock every 30 seconds
-    if (!!currentData) {
+    if (currentData) {
       var currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
 
       var dateAndTime = document.getElementsByClassName('date-and-time')[0];
@@ -289,15 +349,19 @@ function refreshClock() {
   }, 30000);
 }
 
-(0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
-refreshClock();
+var loadWebsite = function () {
+  getLocalStorage();
 
-/*
+  if (currentData) {
+    updateWeather(currentData.city, currentData.state, currentData.country);
+  } else {
+    (0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  }
 
-TO DO
-[ ] Add error handling for rejected calls
+  refreshClock();
+}();
 
-*/
+
 
 /***/ }),
 
@@ -469,6 +533,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index */ "./src/index.js");
 /* harmony import */ var _us_states_json__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./us-states.json */ "./src/us-states.json");
 /* harmony import */ var _countries_json__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./countries.json */ "./src/countries.json");
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -538,7 +606,7 @@ function makeModal() {
   var modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
   modal.addEventListener('click', function (e) {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && !noWeatherYet) {
       closeModal();
     }
   });
@@ -595,22 +663,80 @@ function closeModal() {
   }, 400);
 }
 
-function goToWeather() {
+function showLoading() {
   var modalContent = document.querySelector('.modal-content');
-  var cityInput = document.querySelector('.city-input');
-  var stateInput = document.querySelector('.state-input');
-  var countryInput = document.querySelector('.country-input');
+  modalContent.style.setProperty('--msg-color', 'black');
+  modalContent.setAttribute('message', 'Loading...');
+}
 
-  if (!cityInput.value && !countryInput.value) {
-    modalContent.setAttribute('error', 'Please enter a location');
-  } else if (!cityInput.value) {
-    modalContent.setAttribute('error', 'Please enter a city');
-  } else if (!countryInput.value) {
-    modalContent.setAttribute('error', 'Please enter a country');
-  } else {
-    (0,_index__WEBPACK_IMPORTED_MODULE_0__.updateWeather)(cityInput.value.trim(), stateInput.value, countryInput.value);
-    closeModal();
-  }
+function showError(message) {
+  var modalContent = document.querySelector('.modal-content');
+  modalContent.style.setProperty('--msg-color', 'rgb(220, 0, 0)');
+  modalContent.setAttribute('message', message);
+}
+
+function goToWeather() {
+  return _goToWeather.apply(this, arguments);
+}
+
+function _goToWeather() {
+  _goToWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var modalContent, cityInput, stateInput, countryInput;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            modalContent = document.querySelector('.modal-content');
+            cityInput = document.querySelector('.city-input');
+            stateInput = document.querySelector('.state-input');
+            countryInput = document.querySelector('.country-input');
+
+            if (!(!cityInput.value && !countryInput.value)) {
+              _context.next = 8;
+              break;
+            }
+
+            showError('Please enter a location');
+            _context.next = 19;
+            break;
+
+          case 8:
+            if (cityInput.value) {
+              _context.next = 12;
+              break;
+            }
+
+            showError('Please enter a city');
+            _context.next = 19;
+            break;
+
+          case 12:
+            if (countryInput.value) {
+              _context.next = 16;
+              break;
+            }
+
+            showError('Please enter a country');
+            _context.next = 19;
+            break;
+
+          case 16:
+            showLoading();
+            _context.next = 19;
+            return (0,_index__WEBPACK_IMPORTED_MODULE_0__.updateWeather)(cityInput.value.trim(), stateInput.value, countryInput.value).then(function () {
+              closeModal();
+            }).catch(function (error) {
+              return showError(error.message);
+            });
+
+          case 19:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _goToWeather.apply(this, arguments);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (openModal);
@@ -771,9 +897,7 @@ function convertUvIndex(uvIndex) {
 
 function getBasicDataSource(_x, _x2, _x3) {
   return _getBasicDataSource.apply(this, arguments);
-} // SOMEWHAT sure that this can be synchronous...
-// Might need additional error handling
-
+}
 
 function _getBasicDataSource() {
   _getBasicDataSource = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
@@ -783,18 +907,29 @@ function _getBasicDataSource() {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return fetch("https://api.openweathermap.org/data/2.5/weather?q=".concat(city, ",").concat(state, ",").concat(country, "&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232"));
+            return fetch("https://api.openweathermap.org/data/2.5/weather?q=".concat(city, ",").concat(state, ",").concat(country, "&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232")).catch(function (error) {
+              throw Error('Network error. Please try again later.');
+            });
 
           case 2:
             response = _context.sent;
-            _context.next = 5;
-            return response.json();
+
+            if (response.ok) {
+              _context.next = 5;
+              break;
+            }
+
+            throw Error(response.status === 404 ? 'No location found. Please try again.' : 'Something went wrong. Please try again.');
 
           case 5:
+            _context.next = 7;
+            return response.json();
+
+          case 7:
             basicDataSource = _context.sent;
             return _context.abrupt("return", basicDataSource);
 
-          case 7:
+          case 9:
           case "end":
             return _context.stop();
         }
@@ -822,7 +957,9 @@ function _getComplexDataSource() {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return getBasicDataSource(city, state, country);
+            return getBasicDataSource(city, state, country).catch(function (error) {
+              throw Error(error.message);
+            });
 
           case 2:
             basicDataSource = _context2.sent;
@@ -832,14 +969,25 @@ function _getComplexDataSource() {
             stateFromApi = getState(basicDataSource);
             countryFromApi = basicDataSource.sys.country;
             _context2.next = 10;
-            return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=".concat(latitude, "&lon=").concat(longitude, "&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232"));
+            return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=".concat(latitude, "&lon=").concat(longitude, "&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232")).catch(function (error) {
+              throw Error('Network error. Please try again later.');
+            });
 
           case 10:
             response = _context2.sent;
-            _context2.next = 13;
-            return response.json();
+
+            if (response.ok) {
+              _context2.next = 13;
+              break;
+            }
+
+            throw Error('Something went wrong. Please try again.');
 
           case 13:
+            _context2.next = 15;
+            return response.json();
+
+          case 15:
             complexDataSource = _context2.sent;
             // This place data fills in gaps in the API response and allows user to
             // confirm the data is indeed for the city they requested
@@ -848,7 +996,7 @@ function _getComplexDataSource() {
             complexDataSource.country = countryFromApi;
             return _context2.abrupt("return", complexDataSource);
 
-          case 18:
+          case 20:
           case "end":
             return _context2.stop();
         }

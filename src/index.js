@@ -90,11 +90,11 @@ function showWeather() {
   loadDaily(currentData, isMetricSet);
   loadAuxiliary(currentData, isMetricSet);
 
-  // setLocalStorage();
+  setLocalStorage();
 }
 
 async function updateWeather(city, state, country) {
-  cacheWeatherData(city, state, country).then(() => {
+  await cacheWeatherData(city, state, country).then(() => {
     showWeather();
     setAutoUpdate();
   });
@@ -124,7 +124,7 @@ function refreshClock() {
 }
 
 const loadWebsite = (() => {
-  // getLocalStorage();
+  getLocalStorage();
 
   if (currentData) {
     updateWeather(currentData.city, currentData.state, currentData.country);
@@ -136,10 +136,3 @@ const loadWebsite = (() => {
 })();
 
 export { updateWeather, updateUnits };
-
-/*
-
-TO DO
-[ ] Add error handling for rejected calls
-
-*/

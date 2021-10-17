@@ -20,7 +20,9 @@ function convertUvIndex(uvIndex) {
 async function getBasicDataSource(city, state, country) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
-  );
+  ).catch((error) => {
+    throw Error('Network error. Please try again later.');
+  });
 
   if (!response.ok) {
     throw Error(
@@ -35,8 +37,6 @@ async function getBasicDataSource(city, state, country) {
   return basicDataSource;
 }
 
-// SOMEWHAT sure that this can be synchronous...
-// Might need additional error handling
 function getState(source) {
   return source.sys.country === 'US'
     ? usCities.filter((city) => city.id === source.id)[0].state
@@ -44,7 +44,11 @@ function getState(source) {
 }
 
 async function getComplexDataSource(city, state, country) {
-  const basicDataSource = await getBasicDataSource(city, state, country);
+  const basicDataSource = await getBasicDataSource(city, state, country).catch(
+    (error) => {
+      throw Error(error.message);
+    }
+  );
   const latitude = basicDataSource.coord.lat;
   const longitude = basicDataSource.coord.lon;
   const cityFromApi = basicDataSource.name;
@@ -53,7 +57,9 @@ async function getComplexDataSource(city, state, country) {
 
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232`
-  );
+  ).catch((error) => {
+    throw Error('Network error. Please try again later.');
+  });
 
   if (!response.ok) {
     throw Error('Something went wrong. Please try again.');

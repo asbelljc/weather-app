@@ -128,30 +128,42 @@ function closeModal() {
   setTimeout(() => document.body.removeChild(modal), 400);
 }
 
-function goToWeather() {
-  // try {
+function showLoading() {
+  const modalContent = document.querySelector('.modal-content');
+  modalContent.style.setProperty('--msg-color', 'black');
+  modalContent.setAttribute('message', 'Loading...');
+}
+
+function showError(message) {
+  const modalContent = document.querySelector('.modal-content');
+  modalContent.style.setProperty('--msg-color', 'rgb(220, 0, 0)');
+  modalContent.setAttribute('message', message);
+}
+
+async function goToWeather() {
   const modalContent = document.querySelector('.modal-content');
   const cityInput = document.querySelector('.city-input');
   const stateInput = document.querySelector('.state-input');
   const countryInput = document.querySelector('.country-input');
 
   if (!cityInput.value && !countryInput.value) {
-    modalContent.setAttribute('error', 'Please enter a location');
+    showError('Please enter a location');
   } else if (!cityInput.value) {
-    modalContent.setAttribute('error', 'Please enter a city');
+    showError('Please enter a city');
   } else if (!countryInput.value) {
-    modalContent.setAttribute('error', 'Please enter a country');
+    showError('Please enter a country');
   } else {
-    updateWeather(cityInput.value.trim(), stateInput.value, countryInput.value);
-    closeModal();
+    showLoading();
+    await updateWeather(
+      cityInput.value.trim(),
+      stateInput.value,
+      countryInput.value
+    )
+      .then(() => {
+        closeModal();
+      })
+      .catch((error) => showError(error.message));
   }
-  // } catch (error) {
-  //   console.log(error);
-  //   if (!document.querySelector('.modal')) {
-  //     openModal();
-  //   }
-  //   modalContent.setAttribute('error', error);
-  // }
 }
 
 export default openModal;

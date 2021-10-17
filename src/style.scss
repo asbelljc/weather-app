@@ -159,6 +159,7 @@ body {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
   transform: translateY(-200%);
   transition: transform 400ms;
+  --msg-color: none;
 
   &::before {
     position: absolute;
@@ -168,9 +169,9 @@ body {
     margin: 0 auto;
     width: max-content;
     font-size: 14px;
-    color: rgb(220, 0, 0);
+    color: var(--msg-color);
     text-align: center;
-    content: attr(error);
+    content: attr(message);
   }
 }
 
