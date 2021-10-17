@@ -21,6 +21,15 @@ async function getBasicDataSource(city, state, country) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
   );
+
+  if (!response.ok) {
+    throw Error(
+      response.status === 404
+        ? 'No location found. Please try again.'
+        : 'Something went wrong. Please try again.'
+    );
+  }
+
   const basicDataSource = await response.json();
 
   return basicDataSource;
@@ -45,6 +54,10 @@ async function getComplexDataSource(city, state, country) {
   const response = await fetch(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232`
   );
+
+  if (!response.ok) {
+    throw Error('Something went wrong. Please try again.');
+  }
 
   const complexDataSource = await response.json();
 

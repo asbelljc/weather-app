@@ -68,7 +68,7 @@ function makeModal() {
   const modalContent = document.createElement('div');
   modalContent.className = 'modal-content';
   modal.addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) {
+    if (e.target === e.currentTarget && !noWeatherYet) {
       closeModal();
     }
   });
@@ -129,6 +129,7 @@ function closeModal() {
 }
 
 function goToWeather() {
+  // try {
   const modalContent = document.querySelector('.modal-content');
   const cityInput = document.querySelector('.city-input');
   const stateInput = document.querySelector('.state-input');
@@ -144,6 +145,13 @@ function goToWeather() {
     updateWeather(cityInput.value.trim(), stateInput.value, countryInput.value);
     closeModal();
   }
+  // } catch (error) {
+  //   console.log(error);
+  //   if (!document.querySelector('.modal')) {
+  //     openModal();
+  //   }
+  //   modalContent.setAttribute('error', error);
+  // }
 }
 
 export default openModal;

@@ -7,9 +7,59 @@ import loadDaily from './dailyTile';
 import loadAuxiliary from './auxTile';
 import getLocalDateAndTime from './timeTools';
 
-let currentData; // for caching current locale data
-let isMetricSet = false; // for caching selected units
+let currentData; // cache current locale weather data for easier unit change
+let isMetricSet = false; // cache units so they stay the same after location change
 let updateInterval; // for auto-updating weather
+
+// MDN's suggested check for localStorage availability.
+function storageAvailable(type) {
+  var storage;
+  try {
+    storage = window[type];
+    var x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  } catch (e) {
+    return (
+      e instanceof DOMException &&
+      // everything except Firefox
+      (e.code === 22 ||
+        // Firefox
+        e.code === 1014 ||
+        // test name field too, because code might not be present
+        // everything except Firefox
+        e.name === 'QuotaExceededError' ||
+        // Firefox
+        e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      storage &&
+      storage.length !== 0
+    );
+  }
+}
+
+function setLocalStorage() {
+  if (storageAvailable('localStorage')) {
+    // only need to save location data to localStorage
+    localStorage.setItem(
+      'currentData',
+      JSON.stringify({
+        city: currentData.city,
+        state: currentData.state,
+        country: currentData.country,
+      })
+    );
+    localStorage.setItem('isMetricSet', JSON.stringify(isMetricSet));
+  }
+}
+
+function getLocalStorage() {
+  if (storageAvailable('localStorage')) {
+    currentData = JSON.parse(localStorage.getItem('currentData'));
+    isMetricSet = JSON.parse(localStorage.getItem('isMetricSet'));
+  }
+}
 
 function clearTiles() {
   const root = document.getElementById('root');
@@ -39,9 +89,11 @@ function showWeather() {
   loadMain(currentData, isMetricSet);
   loadDaily(currentData, isMetricSet);
   loadAuxiliary(currentData, isMetricSet);
+
+  // setLocalStorage();
 }
 
-function updateWeather(city, state, country) {
+async function updateWeather(city, state, country) {
   cacheWeatherData(city, state, country).then(() => {
     showWeather();
     setAutoUpdate();
@@ -49,6 +101,7 @@ function updateWeather(city, state, country) {
 }
 
 function setAutoUpdate() {
+  // update weather every 10 minutes
   clearInterval(updateInterval);
   updateInterval = setInterval(() => {
     updateWeather(currentData.city, currentData.state, currentData.country);
@@ -58,7 +111,7 @@ function setAutoUpdate() {
 function refreshClock() {
   setInterval(() => {
     // refresh clock every 30 seconds
-    if (!!currentData) {
+    if (currentData) {
       const currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
       const dateAndTime = document.getElementsByClassName('date-and-time')[0];
 
@@ -70,9 +123,17 @@ function refreshClock() {
   }, 30000);
 }
 
-openModal();
+const loadWebsite = (() => {
+  // getLocalStorage();
 
-refreshClock();
+  if (currentData) {
+    updateWeather(currentData.city, currentData.state, currentData.country);
+  } else {
+    openModal();
+  }
+
+  refreshClock();
+})();
 
 export { updateWeather, updateUnits };
 
