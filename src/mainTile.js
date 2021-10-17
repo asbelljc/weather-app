@@ -96,7 +96,7 @@ function makeHour(hourData, metric) {
   time.textContent = hourData.time;
   const icon = document.createElement('img');
   icon.className = 'icon';
-  icon.src = require(`./Icons/Static/${hourData.iconCode}.svg`);
+  icon.src = require(`./Icons/${hourData.iconCode}.svg`);
   const temperature = document.createElement('div');
   temperature.className = 'temperature';
   temperature.textContent = !!metric
