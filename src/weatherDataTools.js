@@ -1,4 +1,4 @@
-import usCities from './us-cities.json';
+import usCityIds from './us-city-ids.json';
 import getLocalDateAndTime from './timeTools';
 
 function convertToCelsius(temperature) {
@@ -39,7 +39,7 @@ async function getBasicDataSource(city, state, country) {
 
 function getState(source) {
   return source.sys.country === 'US'
-    ? usCities.filter((city) => city.id === source.id)[0].state
+    ? usCityIds.filter((city) => city.id === source.id)[0].state
     : null;
 }
 
