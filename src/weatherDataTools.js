@@ -1,6 +1,10 @@
 import usCityIds from './us-city-ids.json';
 import getLocalDateAndTime from './timeTools';
 
+const networkErrorMsg = 'Network error. Please try again later.';
+const locationErrorMsg = 'No location found. Please try again.';
+const generalErrorMsg = 'Something went wrong. Please try again.';
+
 function convertToCelsius(temperature) {
   return Math.round((temperature - 32) * (5 / 9));
 }
@@ -17,10 +21,8 @@ function convertUvIndex(uvIndex) {
   return 'Extreme';
 }
 
-async function getBasicDataSource(city, state, country) {
-  const response = await fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
-  ).catch((error) => {
+async function fetchAndHandle(url) {
+  const response = await fetch(url).catch((error) => {
     throw Error('Network error. Please try again later.');
   });
 
@@ -32,9 +34,7 @@ async function getBasicDataSource(city, state, country) {
     );
   }
 
-  const basicDataSource = await response.json();
-
-  return basicDataSource;
+  return response.json();
 }
 
 function getState(source) {
@@ -43,37 +43,27 @@ function getState(source) {
     : null;
 }
 
-async function getComplexDataSource(city, state, country) {
-  const basicDataSource = await getBasicDataSource(city, state, country);
+async function getDataSource(city, state, country) {
+  const basicDataSource = await fetchAndHandle(
+    `https://api.openweathermap.org/data/2.5/weather?q=${city},${state},${country}&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232`
+  );
   const latitude = basicDataSource.coord.lat;
   const longitude = basicDataSource.coord.lon;
   const cityFromApi = basicDataSource.name;
   const stateFromApi = getState(basicDataSource);
   const countryFromApi = basicDataSource.sys.country;
 
-  const response = await fetch(
+  const dataSource = await fetchAndHandle(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232`
-  ).catch((error) => {
-    throw Error('Network error. Please try again later.');
-  });
-
-  if (!response.ok) {
-    throw Error(
-      response.status === 404
-        ? 'No location found. Please try again.'
-        : 'Something went wrong. Please try again.'
-    ); // MAKE THIS D.R.Y.! /////////////////////////////////////////////////////////////////////
-  }
-
-  const complexDataSource = await response.json();
+  );
 
   // This place data fills in gaps in the API response and allows user to
   // confirm the data is indeed for the city they requested
-  complexDataSource.city = cityFromApi;
-  complexDataSource.state = stateFromApi;
-  complexDataSource.country = countryFromApi;
+  dataSource.city = cityFromApi;
+  dataSource.state = stateFromApi;
+  dataSource.country = countryFromApi;
 
-  return complexDataSource;
+  return dataSource;
 }
 
 function getCurrentData(source) {
@@ -162,7 +152,7 @@ function getDailyData(source) {
 }
 
 async function getWeatherData(city, state = '', country) {
-  const rawData = await getComplexDataSource(city, state, country);
+  const rawData = await getDataSource(city, state, country);
   const cityName = rawData.city;
   const stateName = rawData.state;
   const countryName = rawData.country;

@@ -1,4 +1,8 @@
-// CHECK ON saving state and picking it back up!!!! //////////////////////////////////////
+// CHECK ON saving state and picking it back up //////////////////////////////////////////
+// Look at D.R.Y. spot in weatherDataTools ///////////////////////////////////////////////
+// Handle errors on loadWebsite() when there IS data in localStorage already /////////////
+// Handle errors in setAutoUpdate... or remove/modify feature ////////////////////////////
+// Reduce BG image sizes!!!!! ////////////////////////////////////////////////////////////
 
 import './style.scss';
 import 'regenerator-runtime/runtime';

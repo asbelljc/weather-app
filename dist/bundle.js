@@ -199,7 +199,11 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-// CHECK ON saving state and picking it back up!!!! //////////////////////////////////////
+// CHECK ON saving state and picking it back up //////////////////////////////////////////
+// Look at D.R.Y. spot in weatherDataTools ///////////////////////////////////////////////
+// Handle errors on loadWebsite() when there IS data in localStorage already /////////////
+// Handle errors in setAutoUpdate... or remove/modify feature ////////////////////////////
+// Reduce BG image sizes!!!!! ////////////////////////////////////////////////////////////
 
 
 
@@ -879,6 +883,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+var networkErrorMsg = 'Network error. Please try again later.';
+var locationErrorMsg = 'No location found. Please try again.';
+var generalErrorMsg = 'Something went wrong. Please try again.';
 
 function convertToCelsius(temperature) {
   return Math.round((temperature - 32) * (5 / 9));
@@ -896,19 +903,19 @@ function convertUvIndex(uvIndex) {
   return 'Extreme';
 }
 
-function getBasicDataSource(_x, _x2, _x3) {
-  return _getBasicDataSource.apply(this, arguments);
+function fetchAndHandle(_x) {
+  return _fetchAndHandle.apply(this, arguments);
 }
 
-function _getBasicDataSource() {
-  _getBasicDataSource = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
-    var response, basicDataSource;
+function _fetchAndHandle() {
+  _fetchAndHandle = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url) {
+    var response;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return fetch("https://api.openweathermap.org/data/2.5/weather?q=".concat(city, ",").concat(state, ",").concat(country, "&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232")).catch(function (error) {
+            return fetch(url).catch(function (error) {
               throw Error('Network error. Please try again later.');
             });
 
@@ -923,21 +930,16 @@ function _getBasicDataSource() {
             throw Error(response.status === 404 ? 'No location found. Please try again.' : 'Something went wrong. Please try again.');
 
           case 5:
-            _context.next = 7;
-            return response.json();
+            return _context.abrupt("return", response.json());
 
-          case 7:
-            basicDataSource = _context.sent;
-            return _context.abrupt("return", basicDataSource);
-
-          case 9:
+          case 6:
           case "end":
             return _context.stop();
         }
       }
     }, _callee);
   }));
-  return _getBasicDataSource.apply(this, arguments);
+  return _fetchAndHandle.apply(this, arguments);
 }
 
 function getState(source) {
@@ -946,19 +948,19 @@ function getState(source) {
   })[0].state : null;
 }
 
-function getComplexDataSource(_x4, _x5, _x6) {
-  return _getComplexDataSource.apply(this, arguments);
+function getDataSource(_x2, _x3, _x4) {
+  return _getDataSource.apply(this, arguments);
 }
 
-function _getComplexDataSource() {
-  _getComplexDataSource = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(city, state, country) {
-    var basicDataSource, latitude, longitude, cityFromApi, stateFromApi, countryFromApi, response, complexDataSource;
+function _getDataSource() {
+  _getDataSource = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(city, state, country) {
+    var basicDataSource, latitude, longitude, cityFromApi, stateFromApi, countryFromApi, dataSource;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return getBasicDataSource(city, state, country);
+            return fetchAndHandle("https://api.openweathermap.org/data/2.5/weather?q=".concat(city, ",").concat(state, ",").concat(country, "&units=imperial&appid=37ed2f3dbba73d4855aa2f683c7e3232"));
 
           case 2:
             basicDataSource = _context2.sent;
@@ -968,41 +970,25 @@ function _getComplexDataSource() {
             stateFromApi = getState(basicDataSource);
             countryFromApi = basicDataSource.sys.country;
             _context2.next = 10;
-            return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=".concat(latitude, "&lon=").concat(longitude, "&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232")).catch(function (error) {
-              throw Error('Network error. Please try again later.');
-            });
+            return fetchAndHandle("https://api.openweathermap.org/data/2.5/onecall?lat=".concat(latitude, "&lon=").concat(longitude, "&units=imperial&exclude=minutely&appid=37ed2f3dbba73d4855aa2f683c7e3232"));
 
           case 10:
-            response = _context2.sent;
-
-            if (response.ok) {
-              _context2.next = 13;
-              break;
-            }
-
-            throw Error(response.status === 404 ? 'No location found. Please try again.' : 'Something went wrong. Please try again.');
-
-          case 13:
-            _context2.next = 15;
-            return response.json();
-
-          case 15:
-            complexDataSource = _context2.sent;
+            dataSource = _context2.sent;
             // This place data fills in gaps in the API response and allows user to
             // confirm the data is indeed for the city they requested
-            complexDataSource.city = cityFromApi;
-            complexDataSource.state = stateFromApi;
-            complexDataSource.country = countryFromApi;
-            return _context2.abrupt("return", complexDataSource);
+            dataSource.city = cityFromApi;
+            dataSource.state = stateFromApi;
+            dataSource.country = countryFromApi;
+            return _context2.abrupt("return", dataSource);
 
-          case 20:
+          case 15:
           case "end":
             return _context2.stop();
         }
       }
     }, _callee2);
   }));
-  return _getComplexDataSource.apply(this, arguments);
+  return _getDataSource.apply(this, arguments);
 }
 
 function getCurrentData(source) {
@@ -1087,7 +1073,7 @@ function getDailyData(source) {
   return dailyData;
 }
 
-function getWeatherData(_x7) {
+function getWeatherData(_x5) {
   return _getWeatherData.apply(this, arguments);
 }
 
@@ -1110,7 +1096,7 @@ function _getWeatherData() {
             state = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : '';
             country = _args3.length > 2 ? _args3[2] : undefined;
             _context3.next = 4;
-            return getComplexDataSource(city, state, country);
+            return getDataSource(city, state, country);
 
           case 4:
             rawData = _context3.sent;
