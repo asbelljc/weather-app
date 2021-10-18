@@ -199,6 +199,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+// CHECK ON saving state and picking it back up!!!! //////////////////////////////////////
 
 
 
@@ -957,9 +958,7 @@ function _getComplexDataSource() {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return getBasicDataSource(city, state, country).catch(function (error) {
-              throw Error(error.message);
-            });
+            return getBasicDataSource(city, state, country);
 
           case 2:
             basicDataSource = _context2.sent;
@@ -981,7 +980,7 @@ function _getComplexDataSource() {
               break;
             }
 
-            throw Error('Something went wrong. Please try again.');
+            throw Error(response.status === 404 ? 'No location found. Please try again.' : 'Something went wrong. Please try again.');
 
           case 13:
             _context2.next = 15;
