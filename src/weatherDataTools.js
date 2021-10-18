@@ -44,11 +44,7 @@ function getState(source) {
 }
 
 async function getComplexDataSource(city, state, country) {
-  const basicDataSource = await getBasicDataSource(city, state, country).catch(
-    (error) => {
-      throw Error(error.message);
-    }
-  );
+  const basicDataSource = await getBasicDataSource(city, state, country);
   const latitude = basicDataSource.coord.lat;
   const longitude = basicDataSource.coord.lon;
   const cityFromApi = basicDataSource.name;
@@ -62,7 +58,11 @@ async function getComplexDataSource(city, state, country) {
   });
 
   if (!response.ok) {
-    throw Error('Something went wrong. Please try again.');
+    throw Error(
+      response.status === 404
+        ? 'No location found. Please try again.'
+        : 'Something went wrong. Please try again.'
+    ); // MAKE THIS D.R.Y.! /////////////////////////////////////////////////////////////////////
   }
 
   const complexDataSource = await response.json();

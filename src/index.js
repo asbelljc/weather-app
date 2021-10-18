@@ -1,3 +1,5 @@
+// CHECK ON saving state and picking it back up!!!! //////////////////////////////////////
+
 import './style.scss';
 import 'regenerator-runtime/runtime';
 import getWeatherData from './weatherDataTools';
