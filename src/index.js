@@ -1,7 +1,3 @@
-// CHECK ON saving state and picking it back up //////////////////////////////////////////
-// Look at D.R.Y. spot in weatherDataTools ///////////////////////////////////////////////
-// Handle errors on loadWebsite() when there IS data in localStorage already /////////////
-// Handle errors in setAutoUpdate... or remove/modify feature ////////////////////////////
 // Reduce BG image sizes!!!!! ////////////////////////////////////////////////////////////
 
 import './style.scss';
@@ -13,7 +9,7 @@ import loadDaily from './dailyTile';
 import loadAuxiliary from './auxTile';
 import getLocalDateAndTime from './timeTools';
 
-let currentData; // cache current locale weather data for easier unit change
+let currentData; // cache current locale weather data for unit change and refresh
 let isMetricSet = false; // cache units so they stay the same after location change
 let updateInterval; // for auto-updating weather
 
@@ -47,15 +43,7 @@ function storageAvailable(type) {
 
 function setLocalStorage() {
   if (storageAvailable('localStorage')) {
-    // only need to save location data to localStorage
-    localStorage.setItem(
-      'currentData',
-      JSON.stringify({
-        city: currentData.city,
-        state: currentData.state,
-        country: currentData.country,
-      })
-    );
+    localStorage.setItem('currentData', JSON.stringify(currentData));
     localStorage.setItem('isMetricSet', JSON.stringify(isMetricSet));
   }
 }
@@ -99,41 +87,67 @@ function showWeather() {
   setLocalStorage();
 }
 
-async function updateWeather(city, state, country) {
-  await cacheWeatherData(city, state, country).then(() => {
-    showWeather();
-    setAutoUpdate();
-  });
+async function updateWeather(
+  city = currentData.city,
+  state = currentData.state,
+  country = currentData.country
+) {
+  await cacheWeatherData(city, state, country)
+    .then(() => {
+      showWeather();
+      setAutoUpdate();
+    })
+    .catch((error) => {
+      getLocalStorage();
+      if (currentData && !document.querySelector('.modal')) {
+        showWeather();
+        setAutoUpdate();
+        showLoadError();
+      }
+      throw Error(error.message);
+    });
 }
 
 function setAutoUpdate() {
   // update weather every 10 minutes
   clearInterval(updateInterval);
   updateInterval = setInterval(() => {
-    updateWeather(currentData.city, currentData.state, currentData.country);
+    updateWeather();
   }, 600000);
 }
 
 function refreshClock() {
   setInterval(() => {
-    // refresh clock every 30 seconds
-    if (currentData) {
+    const isRefreshable = document.querySelector('.date-and-time')
+      ? currentData &&
+        !document.querySelector('.date-and-time').textContent.includes('Error')
+      : false;
+    // refresh clock every 10 seconds
+    if (isRefreshable) {
       const currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
-      const dateAndTime = document.getElementsByClassName('date-and-time')[0];
+      const dateAndTime = document.querySelector('.date-and-time');
 
       dateAndTime.textContent = getLocalDateAndTime(
         currentUnixTime,
         currentData.current.dateAndTime.timezoneOffset
       ).fullDateAndTime;
     }
-  }, 30000);
+  }, 10000);
 }
 
-const loadWebsite = (() => {
+function showLoadError() {
+  const messageBox = document.querySelector('.date-and-time');
+  messageBox.style.color = 'red';
+  messageBox.style.fontSize = '14px';
+  messageBox.textContent = `Error fetching data.
+  Showing data for ${currentData.current.dateAndTime.fullDateAndTime}`;
+}
+
+const loadWebsite = (async () => {
   getLocalStorage();
 
   if (currentData) {
-    updateWeather(currentData.city, currentData.state, currentData.country);
+    updateWeather();
   } else {
     openModal();
   }

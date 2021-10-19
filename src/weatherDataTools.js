@@ -94,7 +94,7 @@ function getCurrentData(source) {
     mph: `${Math.round(source.current.wind_speed)} mph`,
     kmh: `${convertToKmh(source.current.wind_speed)} km/h`,
   };
-  const windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
+  const windDirection = source.current.wind_deg;
   const { humidity } = source.current;
 
   return {

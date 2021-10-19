@@ -235,6 +235,7 @@ body {
 .control-panel {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-bottom: 20px;
 
   button {
@@ -268,6 +269,38 @@ body {
 
 .standard-btn {
   border-right: 1px solid $secondary-color !important;
+}
+
+.refresh {
+  width: 15px;
+  height: 15px;
+  margin-left: auto;
+  padding: 0;
+
+  &.spin {
+    -webkit-animation: spin 1s linear infinite;
+    -moz-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+  }
+
+  @at-root {
+    @-moz-keyframes spin {
+      100% {
+        -moz-transform: rotate(360deg);
+      }
+    }
+    @-webkit-keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+    @keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  }
 }
 
 .tile {

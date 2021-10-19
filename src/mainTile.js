@@ -1,5 +1,5 @@
 import openModal from './modal';
-import { updateUnits } from './index';
+import { updateUnits, updateWeather } from './index';
 
 function makeUnitButtons(metric) {
   const unitBtns = document.createElement('div');
@@ -31,12 +31,22 @@ function makeControlPanel(metric) {
   const controlPanel = document.createElement('div');
   controlPanel.className = 'control-panel';
   const units = makeUnitButtons(metric);
+  const icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = require('./Icons/refresh.svg');
+  const refresh = document.createElement('button');
+  refresh.className = 'refresh';
+  refresh.appendChild(icon);
+  refresh.addEventListener('click', (e) => {
+    refresh.classList.add('spin');
+    updateWeather().then(() => refresh.classList.remove('spin'));
+  });
   const location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location';
   location.addEventListener('click', openModal);
 
-  [units, location].forEach((elem) => controlPanel.appendChild(elem));
+  [units, refresh, location].forEach((elem) => controlPanel.appendChild(elem));
 
   return controlPanel;
 }

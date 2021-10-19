@@ -179,6 +179,7 @@ body.locked {
 .control-panel {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-bottom: 20px;
 }
 .control-panel button {
@@ -207,6 +208,34 @@ body.locked {
 
 .standard-btn {
   border-right: 1px solid #a0a0a0 !important;
+}
+
+.refresh {
+  width: 15px;
+  height: 15px;
+  margin-left: auto;
+  padding: 0;
+}
+.refresh.spin {
+  -webkit-animation: spin 1s linear infinite;
+  -moz-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
 .tile {
