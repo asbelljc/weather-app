@@ -199,10 +199,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-// CHECK ON saving state and picking it back up //////////////////////////////////////////
-// Look at D.R.Y. spot in weatherDataTools ///////////////////////////////////////////////
-// Handle errors on loadWebsite() when there IS data in localStorage already /////////////
-// Handle errors in setAutoUpdate... or remove/modify feature ////////////////////////////
 // Reduce BG image sizes!!!!! ////////////////////////////////////////////////////////////
 
 
@@ -212,7 +208,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var currentData; // cache current locale weather data for easier unit change
+var currentData; // cache current locale weather data for unit change and refresh
 
 var isMetricSet = false; // cache units so they stay the same after location change
 
@@ -240,12 +236,7 @@ function storageAvailable(type) {
 
 function setLocalStorage() {
   if (storageAvailable('localStorage')) {
-    // only need to save location data to localStorage
-    localStorage.setItem('currentData', JSON.stringify({
-      city: currentData.city,
-      state: currentData.state,
-      country: currentData.country
-    }));
+    localStorage.setItem('currentData', JSON.stringify(currentData));
     localStorage.setItem('isMetricSet', JSON.stringify(isMetricSet));
   }
 }
@@ -276,23 +267,23 @@ function cacheWeatherData(_x, _x2, _x3) {
 }
 
 function _cacheWeatherData() {
-  _cacheWeatherData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(city, state, country) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  _cacheWeatherData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(city, state, country) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            _context.next = 2;
+            _context2.next = 2;
             return (0,_weatherDataTools__WEBPACK_IMPORTED_MODULE_2__["default"])(city, state, country);
 
           case 2:
-            currentData = _context.sent;
+            currentData = _context2.sent;
 
           case 3:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee);
+    }, _callee2);
   }));
   return _cacheWeatherData.apply(this, arguments);
 }
@@ -308,28 +299,45 @@ function showWeather() {
   setLocalStorage();
 }
 
-function updateWeather(_x4, _x5, _x6) {
+function updateWeather() {
   return _updateWeather.apply(this, arguments);
 }
 
 function _updateWeather() {
-  _updateWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(city, state, country) {
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+  _updateWeather = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    var city,
+        state,
+        country,
+        _args3 = arguments;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.next = 2;
+            city = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : currentData.city;
+            state = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : currentData.state;
+            country = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : currentData.country;
+            _context3.next = 5;
             return cacheWeatherData(city, state, country).then(function () {
               showWeather();
               setAutoUpdate();
+            }).catch(function (error) {
+              getLocalStorage();
+
+              if (currentData && !document.querySelector('.modal')) {
+                showWeather();
+                setAutoUpdate();
+                showLoadError();
+              }
+
+              throw Error(error.message);
             });
 
-          case 2:
+          case 5:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _updateWeather.apply(this, arguments);
 }
@@ -338,33 +346,52 @@ function setAutoUpdate() {
   // update weather every 10 minutes
   clearInterval(updateInterval);
   updateInterval = setInterval(function () {
-    updateWeather(currentData.city, currentData.state, currentData.country);
+    updateWeather();
   }, 600000);
 }
 
 function refreshClock() {
   setInterval(function () {
-    // refresh clock every 30 seconds
-    if (currentData) {
+    var isRefreshable = document.querySelector('.date-and-time') ? currentData && !document.querySelector('.date-and-time').textContent.includes('Error') : false; // refresh clock every 10 seconds
+
+    if (isRefreshable) {
       var currentUnixTime = Math.round(Date.now() / 1000); // unix time uses seconds instead of ms
 
-      var dateAndTime = document.getElementsByClassName('date-and-time')[0];
+      var dateAndTime = document.querySelector('.date-and-time');
       dateAndTime.textContent = (0,_timeTools__WEBPACK_IMPORTED_MODULE_7__["default"])(currentUnixTime, currentData.current.dateAndTime.timezoneOffset).fullDateAndTime;
     }
-  }, 30000);
+  }, 10000);
 }
 
-var loadWebsite = function () {
-  getLocalStorage();
+function showLoadError() {
+  var messageBox = document.querySelector('.date-and-time');
+  messageBox.style.color = 'red';
+  messageBox.style.fontSize = '14px';
+  messageBox.textContent = "Error fetching data.\n  Showing data for ".concat(currentData.current.dateAndTime.fullDateAndTime);
+}
 
-  if (currentData) {
-    updateWeather(currentData.city, currentData.state, currentData.country);
-  } else {
-    (0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  }
+var loadWebsite = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  return regeneratorRuntime.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          getLocalStorage();
 
-  refreshClock();
-}();
+          if (currentData) {
+            updateWeather();
+          } else {
+            (0,_modal__WEBPACK_IMPORTED_MODULE_3__["default"])();
+          }
+
+          refreshClock();
+
+        case 3:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee);
+}))();
 
 
 
@@ -417,11 +444,23 @@ function makeControlPanel(metric) {
   var controlPanel = document.createElement('div');
   controlPanel.className = 'control-panel';
   var units = makeUnitButtons(metric);
+  var icon = document.createElement('img');
+  icon.className = 'icon';
+  icon.src = __webpack_require__(/*! ./Icons/refresh.svg */ "./src/Icons/refresh.svg");
+  var refresh = document.createElement('button');
+  refresh.className = 'refresh';
+  refresh.appendChild(icon);
+  refresh.addEventListener('click', function (e) {
+    refresh.classList.add('spin');
+    (0,_index__WEBPACK_IMPORTED_MODULE_1__.updateWeather)().then(function () {
+      return refresh.classList.remove('spin');
+    });
+  });
   var location = document.createElement('button');
   location.className = 'change-location';
   location.textContent = 'Change location';
   location.addEventListener('click', _modal__WEBPACK_IMPORTED_MODULE_0__["default"]);
-  [units, location].forEach(function (elem) {
+  [units, refresh, location].forEach(function (elem) {
     return controlPanel.appendChild(elem);
   });
   return controlPanel;
@@ -1010,8 +1049,7 @@ function getCurrentData(source) {
     mph: "".concat(Math.round(source.current.wind_speed), " mph"),
     kmh: "".concat(convertToKmh(source.current.wind_speed), " km/h")
   };
-  var windDirection = source.current.wind_deg; // don't forget to use DOWN arrow icon
-
+  var windDirection = source.current.wind_deg;
   var humidity = source.current.humidity;
   return {
     dateAndTime: dateAndTime,
@@ -1989,7 +2027,8 @@ var map = {
 	"./Wind.svg": "./src/Icons/Wind.svg",
 	"./arrow.svg": "./src/Icons/arrow.svg",
 	"./cross.svg": "./src/Icons/cross.svg",
-	"./raindrop.svg": "./src/Icons/raindrop.svg"
+	"./raindrop.svg": "./src/Icons/raindrop.svg",
+	"./refresh.svg": "./src/Icons/refresh.svg"
 };
 
 
@@ -2495,6 +2534,17 @@ module.exports = __webpack_require__.p + "Images/36beacb9e7cff16b27b4.svg";
 
 "use strict";
 module.exports = __webpack_require__.p + "Images/f66d9e505e96917b2ace.svg";
+
+/***/ }),
+
+/***/ "./src/Icons/refresh.svg":
+/*!*******************************!*\
+  !*** ./src/Icons/refresh.svg ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "Images/4107e3b488c151ecc283.svg";
 
 /***/ }),
 
